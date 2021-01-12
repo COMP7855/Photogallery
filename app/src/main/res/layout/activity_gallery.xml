@@ -80,39 +80,66 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="276dp"
+            android:layout_height="197dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="150dp"
+            android:foreground="@drawable/nature"
+            tools:srcCompat="@drawable/nature" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="50dp"
+            android:text="Left" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="165dp"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="-48dp"
+            android:text="SNAP" />
+
+        <Button
+            android:id="@+id/button7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="300dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="-49dp"
+            android:text="RIGHT" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="41dp"
+            android:layout_marginTop="-445dp"
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageButton8"
+                android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#D2A1C7D8"
-                app:srcCompat="@android:drawable/ic_menu_gallery" />
-
-            <ImageButton
-                android:id="@+id/imageButton10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#D2A1C7D8"
+                android:onClick="onButtonClick_search"
                 app:srcCompat="@android:drawable/ic_menu_search" />
 
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#D2A1C7D8"
+                app:srcCompat="@android:drawable/ic_menu_upload" />
         </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="350dp"
-            android:layout_marginLeft="350dp"
-            android:layout_marginTop="250dp"
-            android:clickable="true"
-            app:backgroundTint="#FFFFFF"
-            app:srcCompat="@android:drawable/ic_menu_camera" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
