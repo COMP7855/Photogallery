@@ -79,5 +79,27 @@
         android:gravity="start|top"
         android:inputType="textMultiLine" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="67dp"
+        android:layout_marginLeft="67dp"
+        android:layout_marginTop="30dp"
+        android:background="#1C88DF"
+        android:text="OK"
+        app:backgroundTint="#2196f3" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="240dp"
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="-47dp"
+        android:background="#1C88DF"
+        android:text="CANCEL"
+        app:backgroundTint="#2196F3" />
+
   </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
