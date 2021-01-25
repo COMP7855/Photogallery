@@ -98,7 +98,6 @@
             android:layout_marginStart="40dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
-            android:foreground="@drawable/nature"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -139,6 +138,7 @@
             android:layout_marginLeft="160dp"
             android:layout_marginTop="-48dp"
             android:background="#1C88DF"
+            android:onClick="onButtonClick_camera"
             android:text="SNAP"
             app:backgroundTint="#2196f3" />
 
