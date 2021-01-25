@@ -15,7 +15,7 @@
       tools:layout_editor_absoluteY="224dp">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -27,7 +27,7 @@
         android:textSize="30sp" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/editTextStartTime"
         android:layout_width="176dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="210dp"
@@ -37,7 +37,7 @@
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textViewEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="62dp"
@@ -48,7 +48,7 @@
         android:textSize="30sp" />
 
     <EditText
-        android:id="@+id/editTextTime"
+        android:id="@+id/editTextEndTime"
         android:layout_width="181dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="210dp"
@@ -58,7 +58,7 @@
         android:inputType="time" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/textViewKeyword"
         android:layout_width="167dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
@@ -69,7 +69,7 @@
         android:textSize="30sp" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
+        android:id="@+id/editTextKeyword"
         android:layout_width="181dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="210dp"
@@ -80,7 +80,7 @@
         android:inputType="textMultiLine" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonOkay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="67dp"
@@ -91,7 +91,7 @@
         app:backgroundTint="#2196f3" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="240dp"

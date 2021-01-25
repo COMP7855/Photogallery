@@ -20,7 +20,7 @@
             android:orientation="vertical"></LinearLayout>
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textViewSnap"
             android:layout_width="309dp"
             android:layout_height="85dp"
             android:layout_marginStart="100dp"
@@ -33,7 +33,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/buttonSignIn"
             android:layout_width="196dp"
             android:layout_height="55dp"
             android:layout_marginStart="89dp"
@@ -45,7 +45,7 @@
             app:iconTint="#2196F3" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/buttonSignUp"
             android:layout_width="196dp"
             android:layout_height="55dp"
             android:layout_marginStart="89dp"

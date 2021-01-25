@@ -21,17 +21,18 @@
 
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewProfile"
                 android:layout_width="152dp"
                 android:layout_height="145dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
+                android:contentDescription="Profile Pic"
                 android:foreground="@drawable/avatar"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="165dp"
@@ -41,30 +42,25 @@
                 android:textSize="30sp"
                 android:textStyle="bold|italic" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="190dp"
-                android:layout_marginLeft="190dp"
-                android:layout_marginTop="20dp"
-                android:text="Lv. 10 Photographer" />
-
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/imageViewEditName"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:layout_marginStart="250dp"
                 android:layout_marginLeft="250dp"
                 android:layout_marginTop="-45dp"
                 android:background="#D2A1C7D8"
+                android:contentDescription="Edit Icon"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_search" />
+            <TextView
+                android:id="@+id/textViewNameText"
+                android:layout_width="174dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="190dp"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="20dp"
+                android:text="Lv. 10 Photographer" />
 
         </LinearLayout>
 
@@ -74,34 +70,37 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageButton4"
+                android:id="@+id/imageButtonSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#D2A1C7D8"
+                android:contentDescription="Search Icon"
                 android:onClick="onButtonClick_search"
                 app:srcCompat="@android:drawable/ic_menu_search" />
 
             <ImageButton
-                android:id="@+id/imageButton5"
+                android:id="@+id/imageButtonUpload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#D2A1C7D8"
+                android:contentDescription="Upload Icon"
                 app:srcCompat="@android:drawable/ic_menu_upload" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imageViewPic"
             android:layout_width="334dp"
             android:layout_height="246dp"
             android:layout_marginStart="40dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
+            android:contentDescription="Gallery Pic"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textViewTimeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="165dp"
@@ -111,16 +110,15 @@
             android:textSize="18sp" />
 
         <EditText
-            android:id="@+id/simpleEditText"
+            android:id="@+id/editTextCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_marginStart="175dp"
             android:layout_marginLeft="175dp"
             android:text="Caption" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/buttonLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
@@ -131,7 +129,7 @@
             app:backgroundTint="#2196f3" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/buttonSnap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="160dp"
@@ -143,7 +141,7 @@
             app:backgroundTint="#2196f3" />
 
         <Button
-            android:id="@+id/button7"
+            android:id="@+id/buttonRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="280dp"
