@@ -1,2 +1,2 @@
 # Photogallery
-asljdbalsjdbal
+COMP7855 LAB PROJECT
