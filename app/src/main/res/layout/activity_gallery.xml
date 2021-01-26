@@ -117,7 +117,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
             android:layout_marginLeft="150dp"
-            android:hint="@string/edit_caption" />
+            android:inputType="textPersonName"  android:text="" />
+
+        //android:hint="@string/edit_caption"
+
 
         <Button
             android:id="@+id/buttonLeft"
