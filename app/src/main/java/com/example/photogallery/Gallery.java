@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class Gallery extends AppCompatActivity {
-
+    public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
     private ArrayList<String> photos = null;
@@ -35,7 +36,7 @@ public class Gallery extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         // update list of photos
-        photos = findPhotos();
+        photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
         if (photos.size() == 0) {
             displayPhoto(null);
         } else {
@@ -44,11 +45,20 @@ public class Gallery extends AppCompatActivity {
         }
     }
 
-    // when the "Search" button is pressed
-    public void onButtonClick_search(View v) {
-        Intent myIntent = new Intent(getBaseContext(), Search.class);
-        startActivity(myIntent);
-    }
+    //when the "Search" button is pressed
+   // public void onButtonClick_search(View v) {
+       // Intent myIntent = new Intent(getBaseContext(), Search.class);
+       // startActivity(myIntent);
+    //}
+
+     public void onButtonClick_search(View v) {
+
+     Intent i = new Intent(Gallery.this, Search.class);
+
+     startActivityForResult(i, SEARCH_ACTIVITY_REQUEST_CODE);
+
+    };
+
 
     // when the "Snap" button is pressed
     public void onButtonClick_camera(View v) {
@@ -70,7 +80,7 @@ public class Gallery extends AppCompatActivity {
     }
 
     // update list of photos
-    private ArrayList<String> findPhotos() {
+    private ArrayList<String> findPhotos(Date startTimestamp, Date endTimestamp, String keywords) {
         // get filepath for Pictures folder
         File file = new File(Environment.getExternalStorageDirectory()
                 .getAbsolutePath(), "/Android/data/com.example.photogallery/files/Pictures");
@@ -78,28 +88,32 @@ public class Gallery extends AppCompatActivity {
         ArrayList<String> photos = new ArrayList<String>();
         // create an array of files located in the folder
         File[] fList = file.listFiles();
+
         if (fList != null) {
-            // sort files (JP)
             Arrays.sort(fList, new Comparator<File>(){
                 public int compare(File f1, File f2)
                 {
                     return Long.valueOf(f1.lastModified()).compareTo(f2.lastModified());
                 } });
-            // for all files in the folder...
+
             for (File f : fList) {
-                // add the filepath to the photos variable
-                photos.add(f.getPath());
+                if (((startTimestamp == null && endTimestamp == null) || (f.lastModified() >= startTimestamp.getTime()
+                        && f.lastModified() <= endTimestamp.getTime())
+                ) && (keywords == "" || f.getPath().contains(keywords)))
+                    photos.add(f.getPath());
             }
         }
         return photos;
     }
+
+
 
     // when the "Left" or "Right" buttons are pressed
     public void scrollPhotos(View v) {
         // update current photo's filename using caption text
         updatePhoto(photos.get(index), ((EditText) findViewById(R.id.editTextCaption)).getText().toString());
         // update list of photos to have the correct filenames
-        photos = findPhotos();  // JP
+        photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");  // JP
         // increase or decrease index depending on button press
         switch (v.getId()) {
             case R.id.buttonLeft:
@@ -152,10 +166,33 @@ public class Gallery extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date startTimestamp , endTimestamp;
+                try {
+                    String from = (String) data.getStringExtra("STARTTIMESTAMP");
+                    String to = (String) data.getStringExtra("ENDTIMESTAMP");
+                    startTimestamp = format.parse(from);
+                    endTimestamp = format.parse(to);
+                } catch (Exception ex) {
+                    startTimestamp = null;
+                    endTimestamp = null;
+                }
+                String keywords = (String) data.getStringExtra("KEYWORDS");
+                index = 0;
+                photos = findPhotos(startTimestamp, endTimestamp, keywords);
+                if (photos.size() == 0) {
+                    displayPhoto(null);
+                } else {
+                    displayPhoto(photos.get(index));
+                }
+            }
+        }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //ImageView mImageView = (ImageView) findViewById(R.id.imageViewPic);
+            //ImageView mImageView = (ImageView) findViewById(R.id.imageViewProfile);
             //mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
-            photos = findPhotos();
+            photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
             index = photos.size()-1; // JP
             displayPhoto(photos.get(index)); // JP
         }

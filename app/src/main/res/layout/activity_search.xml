@@ -87,6 +87,7 @@
         android:layout_marginLeft="67dp"
         android:layout_marginTop="30dp"
         android:background="#1C88DF"
+        android:onClick="go"
         android:text="OK"
         app:backgroundTint="#2196f3" />
 
@@ -98,6 +99,7 @@
         android:layout_marginLeft="240dp"
         android:layout_marginTop="-47dp"
         android:background="#1C88DF"
+        android:onClick="cancel"
         android:text="CANCEL"
         app:backgroundTint="#2196F3" />
 
