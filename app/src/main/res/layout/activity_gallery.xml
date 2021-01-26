@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginStart="2dp"
+    android:layout_marginLeft="2dp"
     tools:context=".Gallery">
 
     <LinearLayout
@@ -48,7 +50,7 @@
                 android:layout_height="22dp"
                 android:layout_marginStart="250dp"
                 android:layout_marginLeft="250dp"
-                android:layout_marginTop="-45dp"
+                android:layout_marginTop="-28dp"
                 android:background="#D2A1C7D8"
                 android:contentDescription="Edit Icon"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
@@ -57,9 +59,9 @@
                 android:id="@+id/textViewNameText"
                 android:layout_width="174dp"
                 android:layout_height="34dp"
-                android:layout_marginStart="190dp"
-                android:layout_marginLeft="190dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="165dp"
+                android:layout_marginLeft="165dp"
+                android:layout_marginTop="5dp"
                 android:text="Lv. 10 Photographer" />
 
         </LinearLayout>
@@ -113,8 +115,8 @@
             android:id="@+id/editTextCaption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="175dp"
-            android:layout_marginLeft="175dp"
+            android:layout_marginStart="150dp"
+            android:layout_marginLeft="150dp"
             android:hint="@string/edit_caption" />
 
         <Button
@@ -125,6 +127,7 @@
             android:layout_marginLeft="35dp"
             android:layout_marginTop="25dp"
             android:background="#1C88DF"
+            android:onClick="scrollPhotos"
             android:text="Left"
             app:backgroundTint="#2196f3" />
 
@@ -148,6 +151,7 @@
             android:layout_marginLeft="280dp"
             android:layout_marginTop="-49dp"
             android:background="#1C88DF"
+            android:onClick="scrollPhotos"
             android:text="RIGHT"
             app:backgroundTint="#2196f3" /><!--set text in edit text-->
 

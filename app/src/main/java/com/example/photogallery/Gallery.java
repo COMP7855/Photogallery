@@ -10,21 +10,35 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Gallery extends AppCompatActivity {
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
+    private ArrayList<String> photos = null;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+        photos = findPhotos();
+        if (photos.size() == 0) {
+            displayPhoto(null);
+        } else {
+            displayPhoto(photos.get(index));
+        }
     }
 
     public void onButtonClick_search(View v) {
@@ -52,6 +66,54 @@ public class Gallery extends AppCompatActivity {
         }
     }
 
+    private ArrayList<String> findPhotos() {
+        File file = new File(Environment.getExternalStorageDirectory()
+                .getAbsolutePath(), "/Android/data/com.example.photogallery/files/Pictures");
+        ArrayList<String> photos = new ArrayList<String>();
+        File[] fList = file.listFiles();
+        if (fList != null) {
+            for (File f : fList) {
+                photos.add(f.getPath());
+            }
+        }
+        return photos;
+    }
+
+    public void scrollPhotos(@NotNull View v) {
+        updatePhoto(photos.get(index), ((EditText) findViewById(R.id.editTextCaption)).getText().toString());
+        switch (v.getId()) {
+            case R.id.buttonLeft:
+                if (index > 0) {
+                    index--;
+                }
+                break;
+            case R.id.buttonRight:
+                if (index < (photos.size()-1)) {
+                index++;
+            }
+            break;
+            default:
+                break;
+        }
+        displayPhoto(photos.get(index));
+    }
+
+    private void displayPhoto(String path) {
+        ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
+        TextView tv = (TextView) findViewById(R.id.textViewTimeStamp);
+        EditText et = (EditText) findViewById(R.id.editTextCaption);
+        if (path == null || path =="") {
+            iv.setImageResource(R.mipmap.ic_launcher);
+            et.setText("");
+            tv.setText("");
+        } else {
+            iv.setImageBitmap(BitmapFactory.decodeFile(path));
+            String[] attr = path.split("_");
+            et.setText(attr[1]);
+            tv.setText(attr[2]);
+        }
+    }
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -61,11 +123,21 @@ public class Gallery extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+    private void updatePhoto(String path, String caption) {
+        String[] attr = path.split("_");
+        if (attr.length >= 3) {
+            File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]);
+            File from = new File(path);
+            from.renameTo(to);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ImageView mImageView = (ImageView) findViewById(R.id.imageViewProfile);
+            ImageView mImageView = (ImageView) findViewById(R.id.imageViewPic);
             mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
         }
     }
