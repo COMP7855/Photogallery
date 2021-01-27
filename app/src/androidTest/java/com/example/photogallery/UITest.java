@@ -25,10 +25,10 @@ public class UITest {
         onView(withId(R.id.imageButtonSearch)).perform(click());
         onView(withId(R.id.editTextStartTime)).perform(clearText(), typeText("2021-01-26 00:00:00"), closeSoftKeyboard());
         onView(withId(R.id.editTextEndTime)).perform(clearText(), typeText("2021-01-27 00:00:00"), closeSoftKeyboard()); //yyyyMMdd_HHmmss - 4:00pm jan 25
-        onView(withId(R.id.editTextKeyword)).perform(typeText("capC"), closeSoftKeyboard());
+        onView(withId(R.id.editTextKeyword)).perform(typeText("capE"), closeSoftKeyboard());
         pauseTestFor(2000);
         onView(withId(R.id.buttonOkay)).perform(click());
-        onView(withId(R.id.editTextCaption)).check(matches(withText("capC")));
+        onView(withId(R.id.editTextCaption)).check(matches(withText("capE")));
         pauseTestFor(1000);
         onView(withId(R.id.buttonRight)).perform(click());
         pauseTestFor(1000);

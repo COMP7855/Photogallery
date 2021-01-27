@@ -34,7 +34,7 @@
         android:layout_marginLeft="210dp"
         android:layout_marginTop="-30dp"
         android:ems="10"
-        android:inputType="date" />
+        android:inputType="date|time" />
 
     <TextView
         android:id="@+id/textViewEndTime"
@@ -55,7 +55,7 @@
         android:layout_marginLeft="210dp"
         android:layout_marginTop="-30dp"
         android:ems="10"
-        android:inputType="date" />
+        android:inputType="date|time" />
 
     <TextView
         android:id="@+id/textViewKeyword"

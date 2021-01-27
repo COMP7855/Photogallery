@@ -29,6 +29,9 @@ public class Gallery extends AppCompatActivity {
     String mCurrentPhotoPath;
     private ArrayList<String> photos = null;
     private int index = 0;
+    private Date startTimestamp = null;
+    private Date endTimestamp = null; //JP
+    private String keywords = null; //JP
 
     // upon signing in to photogallery
     @Override
@@ -113,7 +116,13 @@ public class Gallery extends AppCompatActivity {
         // update current photo's filename using caption text
         updatePhoto(photos.get(index), ((EditText) findViewById(R.id.editTextCaption)).getText().toString());
         // update list of photos to have the correct filenames
-        photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");  // JP
+        if (startTimestamp == null){
+            photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");  // JP
+        }
+        else {
+            photos = findPhotos(startTimestamp, endTimestamp,keywords);  // JP
+        }
+
         // increase or decrease index depending on button press
         switch (v.getId()) {
             case R.id.buttonLeft:
@@ -169,7 +178,7 @@ public class Gallery extends AppCompatActivity {
         if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date startTimestamp , endTimestamp;
+                //Date startTimestamp , endTimestamp;
                 try {
                     String from = (String) data.getStringExtra("STARTTIMESTAMP");
                     String to = (String) data.getStringExtra("ENDTIMESTAMP");
@@ -179,7 +188,8 @@ public class Gallery extends AppCompatActivity {
                     startTimestamp = null;
                     endTimestamp = null;
                 }
-                String keywords = (String) data.getStringExtra("KEYWORDS");
+                //String keywords = (String) data.getStringExtra("KEYWORDS");
+                keywords = (String) data.getStringExtra("KEYWORDS"); //JP
                 index = 0;
                 photos = findPhotos(startTimestamp, endTimestamp, keywords);
                 if (photos.size() == 0) {
