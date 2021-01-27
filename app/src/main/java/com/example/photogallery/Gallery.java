@@ -190,7 +190,7 @@ public class Gallery extends AppCompatActivity {
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //ImageView mImageView = (ImageView) findViewById(R.id.imageViewProfile);
+            //ImageView mImageView = (ImageView) findViewById(R.id.imageViewPic);
             //mImageView.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
             photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
             index = photos.size()-1; // JP
