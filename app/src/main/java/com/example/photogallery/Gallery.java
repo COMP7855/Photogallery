@@ -46,7 +46,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 public class Gallery extends AppCompatActivity {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -103,6 +102,7 @@ public class Gallery extends AppCompatActivity {
                         try {
                             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
                                     location.getLongitude(), 1);
+
                             //Set latitude on TextView
                             latitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude :</b><br></font>" +
                                     addresses.get(0).getLatitude()
