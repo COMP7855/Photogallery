@@ -114,11 +114,12 @@
 
         <EditText
             android:id="@+id/editTextCaption"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
             android:layout_marginLeft="150dp"
-            android:inputType="textPersonName"  android:text="" />
+            android:inputType="textPersonName"
+            android:text="" />
 
         //android:hint="@string/edit_caption"
 
@@ -157,7 +158,36 @@
             android:background="#1C88DF"
             android:onClick="scrollPhotos"
             android:text="RIGHT"
-            app:backgroundTint="#2196f3" /><!--set text in edit text-->
+            app:backgroundTint="#2196f3" />
+
+        <TextView
+            android:id="@+id/latitude"
+            android:layout_width="100dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/longitude"
+            android:layout_width="110dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="200dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="-35dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/country"
+            android:layout_width="104dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="20dp"
+            android:text="TextView" />
+
+        <!--set text in edit text-->
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

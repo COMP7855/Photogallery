@@ -1,12 +1,15 @@
 package com.example.photogallery;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,19 +20,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.content.Context;
+
+import android.util.Log;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.BreakIterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
 
 public class Gallery extends AppCompatActivity {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
@@ -40,8 +56,7 @@ public class Gallery extends AppCompatActivity {
     private Date startTimestamp = null;
     private Date endTimestamp = null; //JP
     private String keywords = null; //JP
-    private FusedLocationProviderClient fusedLocationClient;
-
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     // upon signing in to photogallery
     @Override
@@ -56,8 +71,13 @@ public class Gallery extends AppCompatActivity {
             // display the first photo on the list
             displayPhoto(photos.get(index));
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        //check permission
+
+    }
+
+    private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -68,18 +88,41 @@ public class Gallery extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                //Initialize location
+                    Location location = task.getResult();
+                    TextView latitude = (TextView) findViewById(R.id.latitude);
+                    TextView longitude = (TextView) findViewById(R.id.longitude);
+                    TextView country = (TextView) findViewById(R.id.country);
+                    if (location != null) {
+                        //Initialize geoCoder
+                        Geocoder geocoder = new Geocoder(Gallery.this, Locale.getDefault());
+                        //Initialize address list
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                    location.getLongitude(), 1);
+                            //Set latitude on TextView
+                            latitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude :</b><br></font>" +
+                                    addresses.get(0).getLatitude()
+                            ));
+
+                            longitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Longitude :</b><br></font>" +
+                                    addresses.get(0).getLongitude()
+                            ));
+
+                            country.setText(Html.fromHtml("<font color = '#6200EE'><b>Address :</b><br></font>" +
+                                    addresses.get(0).getAddressLine(0)
+                            ));
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
-                });
+                }
+        });
     }
-
 
     //when the "Search" button is pressed
    // public void onButtonClick_search(View v) {
@@ -264,6 +307,14 @@ public class Gallery extends AppCompatActivity {
             photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
             index = photos.size()-1; // JP
             displayPhoto(photos.get(index)); // JP
+
+            if (ActivityCompat.checkSelfPermission(Gallery.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                //When permission granted
+                getLocation();
+            } else {
+                ActivityCompat.requestPermissions(Gallery.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+            }
         }
     }
 
