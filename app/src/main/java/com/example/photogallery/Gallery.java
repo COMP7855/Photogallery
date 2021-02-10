@@ -97,6 +97,13 @@ public class Gallery extends AppCompatActivity {
                     TextView longitude = (TextView) findViewById(R.id.longitude);
                     TextView country = (TextView) findViewById(R.id.country);
                     if (location != null) {
+                        latitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude :</b><br></font>" +
+                                location.getLatitude()
+                        ));
+                        longitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Longitude :</b><br></font>" +
+                                location.getLongitude()
+                        ));
+                        /*
                         //Initialize geoCoder
                         Geocoder geocoder = new Geocoder(Gallery.this, Locale.getDefault());
                         //Initialize address list
@@ -116,9 +123,13 @@ public class Gallery extends AppCompatActivity {
                                     addresses.get(0).getAddressLine(0)
                             ));
 
+
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                         */
                     }
                 }
         });
