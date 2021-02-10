@@ -93,7 +93,32 @@ public class Gallery extends AppCompatActivity {
 
      startActivityForResult(i, SEARCH_ACTIVITY_REQUEST_CODE);
 
-    };
+    }
+
+    public void onButtonClick_share(View v) {
+        share_Image(photos.get(index));
+    }
+
+    public void share_Image(String path) {
+
+        //ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
+        //iv.setImageBitmap(BitmapFactory.decodeFile(path));
+        File photoShare = new File(path);
+        String send_to = "Hello";
+        Uri photoURI = FileProvider.getUriForFile(this, "com.example.photogallery.fileprovider", photoShare);
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, photoURI);
+        shareIntent.setType("image/jpeg");
+        //startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+
+        startActivity(Intent.createChooser(shareIntent, send_to));
+
+
+        //File photoShare = photos.get(index);
+
+    }
 
 
     // when the "Snap" button is pressed
@@ -191,6 +216,7 @@ public class Gallery extends AppCompatActivity {
             tv.setText(attr[2] + "_"+ attr [3]);
         }
     }
+
 
     // creates an image file with a temporary name
     // called from "Snap" button function onButtonClick_camera
