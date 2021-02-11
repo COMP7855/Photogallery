@@ -94,8 +94,8 @@
 
         <ImageView
             android:id="@+id/imageViewPic"
-            android:layout_width="313dp"
-            android:layout_height="190dp"
+            android:layout_width="334dp"
+            android:layout_height="246dp"
             android:layout_marginStart="40dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
@@ -176,15 +176,6 @@
             android:layout_marginStart="200dp"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="-35dp"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/country"
-            android:layout_width="104dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="20dp"
             android:text="TextView" />
 
         <!--set text in edit text-->
