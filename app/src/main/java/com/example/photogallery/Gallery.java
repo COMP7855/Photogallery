@@ -270,7 +270,7 @@ public class Gallery extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_latitude_" + "_longitude_" + "_";
+        String imageFileName = "_caption_" + timeStamp + "_000_111_"; // 000 and 111 in place of long and lat
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
