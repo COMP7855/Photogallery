@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Search">
 
-  <LinearLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
@@ -18,90 +18,183 @@
         android:id="@+id/textViewStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/yellowtail"
-        android:text="START TIME: "
+        android:text="START TIME:"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextStartTime"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextStartTime"
-        android:layout_width="176dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="210dp"
-        android:layout_marginLeft="210dp"
-        android:layout_marginTop="-30dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="date|time" />
+        android:inputType="date|time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etLatMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextKeyword" />
+
+    <EditText
+        android:id="@+id/etLatMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etLatMin" />
+
+    <EditText
+        android:id="@+id/etLongMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etLatMax" />
+
+    <EditText
+        android:id="@+id/etLongMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etLongMin" />
 
     <TextView
         android:id="@+id/textViewEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="62dp"
-        android:layout_marginLeft="62dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/yellowtail"
         android:text="END TIME:"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextEndTime"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStartTime" />
 
     <EditText
         android:id="@+id/editTextEndTime"
-        android:layout_width="181dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="210dp"
-        android:layout_marginLeft="210dp"
-        android:layout_marginTop="-30dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="date|time" />
+        android:inputType="date|time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartTime" />
 
     <TextView
         android:id="@+id/textViewKeyword"
-        android:layout_width="167dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        android:layout_marginLeft="45dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/yellowtail"
         android:text="KEYWORD:"
         android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/editTextKeyword"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEndTime" />
 
     <EditText
         android:id="@+id/editTextKeyword"
-        android:layout_width="181dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="210dp"
-        android:layout_marginLeft="210dp"
-        android:layout_marginTop="-35dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:gravity="start|top"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEndTime" />
+
+    <TextView
+        android:id="@+id/textViewKeyword3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/yellowtail"
+        android:text="MAX LAT:"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/etLatMax"
+        app:layout_constraintTop_toBottomOf="@+id/textViewKeyword4" />
+
+    <TextView
+        android:id="@+id/textViewKeyword4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/yellowtail"
+        android:text="MIN LAT:"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/etLatMin"
+        app:layout_constraintTop_toBottomOf="@+id/textViewKeyword" />
 
     <Button
         android:id="@+id/buttonOkay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="67dp"
-        android:layout_marginLeft="67dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="8dp"
         android:background="#1C88DF"
         android:onClick="go"
         android:text="OK"
-        app:backgroundTint="#2196f3" />
+        app:backgroundTint="#2196f3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCancel"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="240dp"
-        android:layout_marginLeft="240dp"
-        android:layout_marginTop="-47dp"
+        android:layout_marginBottom="8dp"
         android:background="#1C88DF"
         android:onClick="cancel"
         android:text="CANCEL"
-        app:backgroundTint="#2196F3" />
+        app:backgroundTint="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonOkay" />
 
-  </LinearLayout>
+    <TextView
+        android:id="@+id/textViewKeyword5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/yellowtail"
+        android:text="MIN LONG:"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/etLongMin"
+        app:layout_constraintTop_toBottomOf="@+id/textViewKeyword3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/yellowtail"
+        android:text="MAX LONG:"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/etLongMax"
+        app:layout_constraintTop_toBottomOf="@+id/textViewKeyword5" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

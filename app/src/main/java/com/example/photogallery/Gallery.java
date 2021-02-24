@@ -5,19 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -25,9 +21,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Context;
-
-import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,15 +29,15 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.BreakIterator;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
+
 
 public class Gallery extends AppCompatActivity {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
@@ -57,11 +50,24 @@ public class Gallery extends AppCompatActivity {
     private String keywords = null; //JP
     private FusedLocationProviderClient fusedLocationProviderClient;
 
+    private TextView tvLatitude;
+    private TextView tvLongitude;
+
+    private Double latMin = -999.0;
+    private Double latMax = 999.9;
+    private Double longMin = -999.9;
+    private Double longMax = 999.9;
+
     // upon signing in to photogallery
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+        tvLatitude = (TextView) findViewById(R.id.latitude);
+        tvLongitude = (TextView) findViewById(R.id.longitude);
+
         // update list of photos
         photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
         if (photos.size() == 0) {
@@ -92,33 +98,9 @@ public class Gallery extends AppCompatActivity {
             public void onComplete(@NonNull Task<Location> task) {
                 //Initialize location
                     Location location = task.getResult();
-                    TextView latitude = (TextView) findViewById(R.id.latitude);
-                    TextView longitude = (TextView) findViewById(R.id.longitude);
-                    TextView country = (TextView) findViewById(R.id.country);
                     if (location != null) {
-                        //Initialize geoCoder
-                        Geocoder geocoder = new Geocoder(Gallery.this, Locale.getDefault());
-                        //Initialize address list
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                    location.getLongitude(), 1);
-
-                            //Set latitude on TextView
-                            latitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude :</b><br></font>" +
-                                    addresses.get(0).getLatitude()
-                            ));
-
-                            longitude.setText(Html.fromHtml("<font color = '#6200EE'><b>Longitude :</b><br></font>" +
-                                    addresses.get(0).getLongitude()
-                            ));
-
-                            country.setText(Html.fromHtml("<font color = '#6200EE'><b>Address :</b><br></font>" +
-                                    addresses.get(0).getAddressLine(0)
-                            ));
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        tvLatitude.setText(String.valueOf(location.getLatitude()));
+                        tvLongitude.setText(String.valueOf(location.getLongitude()));
                     }
                 }
         });
@@ -143,6 +125,7 @@ public class Gallery extends AppCompatActivity {
     }
 
     public void share_Image(String path) {
+
 
         //ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
         //iv.setImageBitmap(BitmapFactory.decodeFile(path));
@@ -201,9 +184,18 @@ public class Gallery extends AppCompatActivity {
                 } });
 
             for (File f : fList) {
+                String[] attr = f.getPath().split("_");
+                Double latitude = Double.parseDouble(attr[4]);
+                Double longitude = Double.parseDouble(attr[5]);
+
                 if (((startTimestamp == null && endTimestamp == null) || (f.lastModified() >= startTimestamp.getTime()
                         && f.lastModified() <= endTimestamp.getTime())
-                ) && (keywords == "" || f.getPath().contains(keywords)))
+                ) && (keywords == "" || f.getPath().contains(keywords))
+                        && (latitude >= latMin)
+                        && (latitude <= latMax)
+                        && (longitude >= longMin)
+                        && (longitude <= longMax)
+                )
                     photos.add(f.getPath());
             }
         }
@@ -215,7 +207,11 @@ public class Gallery extends AppCompatActivity {
     // when the "Left" or "Right" buttons are pressed
     public void scrollPhotos(View v) {
         // update current photo's filename using caption text
-        updatePhoto(photos.get(index), ((EditText) findViewById(R.id.editTextCaption)).getText().toString());
+        updatePhoto(photos.get(index),
+                ((EditText) findViewById(R.id.editTextCaption)).getText().toString(),
+                tvLatitude.getText().toString(),
+                tvLongitude.getText().toString()
+        );
         // update list of photos to have the correct filenames
         if (startTimestamp == null){
             photos = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");  // JP
@@ -255,8 +251,20 @@ public class Gallery extends AppCompatActivity {
         } else {
             iv.setImageBitmap(BitmapFactory.decodeFile(path));
             String[] attr = path.split("_");
+            // set photo caption
             et.setText(attr[1]);
-            tv.setText(attr[2] + "_"+ attr [3]);
+            // set photo timestamp
+            tv.setText(attr[2] + "_" + attr [3]);
+            if(attr.length >= 6)
+            {
+                tvLatitude.setText(attr[4]);
+                tvLongitude.setText(attr[5]);
+            }
+            else
+            {
+                //tvLatitude.setText("Latitude");
+                //tvLongitude.setText("Longitude");
+            }
         }
     }
 
@@ -266,7 +274,7 @@ public class Gallery extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_";
+        String imageFileName = "_caption_" + timeStamp + "_000_111_"; // 000 and 111 in place of long and lat
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
@@ -274,9 +282,11 @@ public class Gallery extends AppCompatActivity {
     }
 
     // when a picture has been taken in the camera app
+    // or when a search has been made
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // search
         if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -290,8 +300,24 @@ public class Gallery extends AppCompatActivity {
                     startTimestamp = null;
                     endTimestamp = null;
                 }
-                //String keywords = (String) data.getStringExtra("KEYWORDS");
                 keywords = (String) data.getStringExtra("KEYWORDS"); //JP
+
+                //DecimalFormat formatLongLat = new DecimalFormat("0.0000");
+                try {
+                    String strLatMin = (String) data.getStringExtra("LATMIN");
+                    String strLatMax = (String) data.getStringExtra("LATMAX");
+                    String strLongMin = (String) data.getStringExtra("LONGMIN");
+                    String strLongMax = (String) data.getStringExtra("LONGMAX");
+                    latMin = Double.parseDouble(strLatMin);
+                    latMax = Double.parseDouble(strLatMax);
+                    longMin = Double.parseDouble(strLongMin);
+                    longMax = Double.parseDouble(strLongMax);
+                } catch (Exception ex) {
+                    latMin = null;
+                    latMax = null;
+                    longMin = null;
+                    longMax = null;
+                }
                 index = 0;
                 photos = findPhotos(startTimestamp, endTimestamp, keywords);
                 if (photos.size() == 0) {
@@ -320,11 +346,18 @@ public class Gallery extends AppCompatActivity {
 
     // when scrollPhotos runs ("Left or "Right" button pressed)
     // update the currently displayed pictures filename with the textbox caption
-    private void updatePhoto(String path, String caption) {
+    private void updatePhoto(String path, String caption, String latitude, String longitude) {
         String[] attr = path.split("_");
-        if (attr.length >= 3) {
+        if (attr.length >= 6)
+        {
+            File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
+                    latitude + "_" + longitude + "_.jpg");
+            File from = new File(path);
+            from.renameTo(to);
+        }
+        else if (attr.length >= 3)
+        {
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_.jpg");
-            //File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]);
             File from = new File(path);
             from.renameTo(to);
         }
