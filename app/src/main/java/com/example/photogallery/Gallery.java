@@ -61,14 +61,6 @@ public class Gallery extends AppCompatActivity {
     // upon signing in to photogallery
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Uses the <code><a href="/reference/java/text/SimpleDateFormat.html">SimpleDateFormat</a></code> class to create a String with
-        // the current date and time.
-                SimpleDateFormat dateFormat =
-                        new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss", Locale.getDefault());
-                String logDate = dateFormat.format(new Date());
-        // Applies the date and time to the name of the trace log.
-                Debug.startMethodTracing(
-                        "sample-" + logDate);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
@@ -88,7 +80,6 @@ public class Gallery extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         //check permission
 
-        Debug.stopMethodTracing();
     }
 
     private void getLocation() {
@@ -134,6 +125,7 @@ public class Gallery extends AppCompatActivity {
     }
 
     public void share_Image(String path) {
+
 
         //ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
         //iv.setImageBitmap(BitmapFactory.decodeFile(path));
