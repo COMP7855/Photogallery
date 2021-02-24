@@ -23,7 +23,6 @@
 
 
             <ImageView
-                android:id="@+id/imageViewProfile"
                 android:layout_width="152dp"
                 android:layout_height="145dp"
                 android:layout_marginStart="5dp"
@@ -34,7 +33,6 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="165dp"
@@ -45,7 +43,6 @@
                 android:textStyle="bold|italic" />
 
             <ImageView
-                android:id="@+id/imageViewEditName"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:layout_marginStart="250dp"
@@ -56,7 +53,6 @@
                 app:srcCompat="@android:drawable/ic_menu_edit" />
 
             <TextView
-                android:id="@+id/textViewNameText"
                 android:layout_width="174dp"
                 android:layout_height="34dp"
                 android:layout_marginStart="165dp"
@@ -82,7 +78,6 @@
                 app:srcCompat="@android:drawable/ic_menu_search" />
 
             <ImageButton
-                android:id="@+id/imageButtonUpload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -137,7 +132,6 @@
             app:backgroundTint="#2196f3" />
 
         <Button
-            android:id="@+id/buttonSnap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="160dp"
