@@ -404,4 +404,9 @@ public class Gallery extends AppCompatActivity {
             from.renameTo(to);
         }
     }
+
+    public void onButtonClick_delete(View v)
+    {
+
+    }
 }
