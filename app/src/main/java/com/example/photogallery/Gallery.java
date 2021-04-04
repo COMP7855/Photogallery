@@ -19,7 +19,9 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -39,6 +41,7 @@ import java.util.Date;
 public class Gallery extends AppCompatActivity {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 1; //JK
     String mCurrentPhotoPath;
     private ArrayList<String> photoPathList = null;
     private int photoIndex = 0;
@@ -185,6 +188,14 @@ public class Gallery extends AppCompatActivity {
             }
         }
     }
+    /* Called when the user taps the video button */ //JK
+    @SuppressLint("QueryPermissionsNeeded")
+    public void takeVideo(View view) {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+        }
+    }
 
     // update list of photos
     private ArrayList<String> findPhotos(Date startTimestamp, Date endTimestamp, String keywords) {
@@ -329,6 +340,17 @@ public class Gallery extends AppCompatActivity {
 
             // get the current location
             getLocation();
+        }
+        /*If take an video*/ //JK
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            Uri videoUri = data.getData();
+            VideoView vd = findViewById(R.id.videoView);
+            vd.setVideoURI(videoUri);
+            MediaController md = new MediaController(this);
+            md.setAnchorView(vd);
+            vd.setMediaController(md);
+            vd.setAlpha(1);
+            vd.start();
         }
     }
 
