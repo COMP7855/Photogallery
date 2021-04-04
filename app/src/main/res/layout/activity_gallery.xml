@@ -33,6 +33,7 @@
                 android:foreground="@drawable/avatar"
                 tools:srcCompat="@tools:sample/avatars" />
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,6 +99,29 @@
             android:contentDescription="Gallery Pic"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/caption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Timestamp">
+
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:contentDescription="@string/VideoView_gallery" />
+        </FrameLayout>
+
+
         <TextView
             android:id="@+id/textViewTimeStamp"
             android:layout_width="wrap_content"
@@ -154,6 +178,22 @@
             android:onClick="scrollPhotos"
             android:text="RIGHT"
             app:backgroundTint="#2196f3" />
+
+        <Button
+            android:id="@+id/video"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="takeVideo"
+            android:text="@string/button_video"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/upload"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/search" />
 
         <TextView
             android:id="@+id/latitude"
