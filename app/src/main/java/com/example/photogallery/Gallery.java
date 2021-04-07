@@ -407,6 +407,31 @@ public class Gallery extends AppCompatActivity {
 
     public void onButtonClick_delete(View v)
     {
+        if(photoPathList.size() >= 1)
+        {
+            delete_photo(photoPathList.get(photoIndex));
+        }
+
+    }
+
+    private void delete_photo(String current_path)
+    {
+        File file_to_delete = new File(current_path);
+        file_to_delete.delete();
+        photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
+
+        if(photoPathList.size() >= 1)
+        {
+            if(photoIndex >= photoPathList.size() - 2){
+                photoIndex = photoPathList.size()-1;
+
+            }
+            displayPhoto(photoPathList.get(photoIndex));        }
+        else
+        {
+            photoIndex = 0;
+            displayPhoto(null);
+        }
 
     }
 }
