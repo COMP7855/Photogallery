@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,10 +27,22 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -55,6 +68,8 @@ public class Gallery extends AppCompatActivity {
     private Double longMin = -999.9;
     private Double longMax = 999.9;
 
+    private static final String TAG = "GalleryActivity";
+
     // upon entering gallery view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +93,102 @@ public class Gallery extends AppCompatActivity {
         //check permission
 
     }
+
+    /*
+    public static void weatherAPIrequest() throws Exception {
+        String apiEndPoint="https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
+        String location="Langley, BC, CA";
+        String startDate="2021-4-7"; //optional
+        String unitGroup="metric"; //us,metric,uk
+        String apiKey="F3SHHHG8JTW3X9YECHGC9SFR7"; //sign up for a free api key at https://www.visualcrossing.com/weather/weather-data-services
+
+        String method="GET"; // GET OR POST
+
+        //Build the URL pieces
+        StringBuilder requestBuilder=new StringBuilder(apiEndPoint);
+        requestBuilder.append(location);
+
+        if (startDate!=null && !startDate.isEmpty()) {
+            requestBuilder.append("/").append(startDate);
+        }
+
+        //Build the parameters to send via GET or POST
+        StringBuilder paramBuilder=new StringBuilder();
+        paramBuilder.append("&").append("unitGroup=").append(unitGroup);
+        paramBuilder.append("&").append("key=").append(apiKey);
+
+        // add the parameters to the request
+        requestBuilder.append("?").append(paramBuilder);
+
+        //set up the connection
+        //URL url = new URL(requestBuilder.toString());
+        URL url = new URL("http://www.android.com/");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+
+        //check the response code and set up the reader for the appropriate stream
+        int responseCode = 0;
+        boolean isSuccess = false;
+        try{
+            responseCode = conn.getResponseCode();
+            isSuccess=responseCode==200;
+        }
+        catch (Exception e) {
+            Log.e(TAG, "I got an error", e);
+        }
+
+        StringBuffer response = new StringBuffer();
+        try (
+                BufferedReader in = new BufferedReader(new InputStreamReader(isSuccess?conn.getInputStream():conn.getErrorStream()))
+        ) {
+
+            //read the response
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        }
+        if (!isSuccess) {
+            Log.d(TAG, "Bad response status code:" + responseCode + response.toString());
+
+            return;
+        }
+
+        //pass the string response to be parsed and used
+        parseWeatherDataJson(response.toString());
+    }
+
+    private static void parseWeatherDataJson(String rawResult) throws JSONException {
+
+        if (rawResult==null || rawResult.isEmpty()) {
+            Log.d(TAG,"No raw data%n");
+            return;
+        }
+
+        JSONObject timelineResponse = new JSONObject(rawResult);
+
+        ZoneId zoneId=ZoneId.of(timelineResponse.getString("timezone"));
+
+        Log.d(TAG,"Weather data for: " + timelineResponse.getString("resolvedAddress"));
+
+        JSONArray values=timelineResponse.getJSONArray("days");
+
+        Log.d(TAG,"Date\tMaxTemp\tMinTemp\tPrecip\tSource%n");
+        for (int i = 0; i < values.length(); i++) {
+            JSONObject dayValue = values.getJSONObject(i);
+
+            ZonedDateTime datetime=ZonedDateTime.ofInstant(Instant.ofEpochSecond(dayValue.getLong("datetimeEpoch")), zoneId);
+
+            double maxtemp=dayValue.getDouble("tempmax");
+            double mintemp=dayValue.getDouble("tempmin");
+            double pop=dayValue.getDouble("precip");
+            String source=dayValue.getString("source");
+            Log.d(TAG, datetime.format(DateTimeFormatter.ISO_LOCAL_DATE) + "\t" + maxtemp + "\t" +  mintemp + "\t" + pop + "\t" + source );
+        }
+    }
+
+     */
 
     // get last location and write it on the screen
     @SuppressLint("MissingPermission")
@@ -405,8 +516,9 @@ public class Gallery extends AppCompatActivity {
         }
     }
 
-    public void onButtonClick_delete(View v)
-    {
-
+    public void onButtonClick_delete(View v) throws Exception {
+        Log.d(TAG, "delete button pressed");
+        //weatherAPIrequest();
+        new WeatherAPI().execute();
     }
 }

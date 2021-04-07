@@ -177,6 +177,7 @@
             android:id="@+id/buttonDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onButtonClick_delete"
             android:text="Delete" />
 
         <!--set text in edit text-->
