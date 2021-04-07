@@ -49,7 +49,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 
-public class Gallery extends AppCompatActivity {
+public class Gallery extends AppCompatActivity implements AsyncResponse {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
@@ -69,6 +69,8 @@ public class Gallery extends AppCompatActivity {
     private Double longMax = 999.9;
 
     private static final String TAG = "GalleryActivity";
+    WeatherAPI asyncTask =new WeatherAPI();
+    private TextView tvWeather ;
 
     // upon entering gallery view
     @Override
@@ -92,6 +94,26 @@ public class Gallery extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         //check permission
 
+        //this to set delegate/listener back to this class
+        asyncTask.delegate = this;
+
+        //execute the async task
+        asyncTask.execute();
+
+        tvWeather = (TextView)findViewById(R.id.tvWeather);
+    }
+
+    //this override the implemented method from asyncTask
+    @Override
+    public void processFinish(String output){
+        //Here you will receive the result fired from async class
+        //of onPostExecute(result) method.
+
+        try {
+            parseWeatherDataJson(output);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -158,8 +180,8 @@ public class Gallery extends AppCompatActivity {
         //pass the string response to be parsed and used
         parseWeatherDataJson(response.toString());
     }
-
-    private static void parseWeatherDataJson(String rawResult) throws JSONException {
+*/
+    private void parseWeatherDataJson(String rawResult) throws JSONException {
 
         if (rawResult==null || rawResult.isEmpty()) {
             Log.d(TAG,"No raw data%n");
@@ -168,27 +190,18 @@ public class Gallery extends AppCompatActivity {
 
         JSONObject timelineResponse = new JSONObject(rawResult);
 
-        ZoneId zoneId=ZoneId.of(timelineResponse.getString("timezone"));
-
         Log.d(TAG,"Weather data for: " + timelineResponse.getString("resolvedAddress"));
 
         JSONArray values=timelineResponse.getJSONArray("days");
 
-        Log.d(TAG,"Date\tMaxTemp\tMinTemp\tPrecip\tSource%n");
         for (int i = 0; i < values.length(); i++) {
             JSONObject dayValue = values.getJSONObject(i);
 
-            ZonedDateTime datetime=ZonedDateTime.ofInstant(Instant.ofEpochSecond(dayValue.getLong("datetimeEpoch")), zoneId);
-
-            double maxtemp=dayValue.getDouble("tempmax");
-            double mintemp=dayValue.getDouble("tempmin");
-            double pop=dayValue.getDouble("precip");
-            String source=dayValue.getString("source");
-            Log.d(TAG, datetime.format(DateTimeFormatter.ISO_LOCAL_DATE) + "\t" + maxtemp + "\t" +  mintemp + "\t" + pop + "\t" + source );
+            String conditions = dayValue.getString("conditions");
+            Log.d(TAG, "Conditions: " + conditions);
+            tvWeather.setText(conditions);
         }
     }
-
-     */
 
     // get last location and write it on the screen
     @SuppressLint("MissingPermission")

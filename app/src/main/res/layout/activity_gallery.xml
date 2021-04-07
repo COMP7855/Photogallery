@@ -13,8 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="242dp"
-        tools:layout_editor_absoluteY="252dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -99,6 +102,12 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
+            android:id="@+id/tvWeather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weather" />
+
+        <TextView
             android:id="@+id/textViewTimeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,6 +117,9 @@
             android:text="TIME STAMP"
             android:textSize="18sp" />
 
+        //android:hint="@string/edit_caption"
+
+
         <EditText
             android:id="@+id/editTextCaption"
             android:layout_width="160dp"
@@ -116,9 +128,6 @@
             android:layout_marginLeft="150dp"
             android:inputType="textPersonName"
             android:text="" />
-
-        //android:hint="@string/edit_caption"
-
 
         <Button
             android:id="@+id/buttonLeft"
@@ -155,6 +164,13 @@
             android:text="RIGHT"
             app:backgroundTint="#2196f3" />
 
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="367dp"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonClick_delete"
+            android:text="Delete" />
+
         <TextView
             android:id="@+id/latitude"
             android:layout_width="100dp"
@@ -172,13 +188,6 @@
             android:layout_marginLeft="200dp"
             android:layout_marginTop="-35dp"
             android:text="TextView" />
-
-        <Button
-            android:id="@+id/buttonDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onButtonClick_delete"
-            android:text="Delete" />
 
         <!--set text in edit text-->
 

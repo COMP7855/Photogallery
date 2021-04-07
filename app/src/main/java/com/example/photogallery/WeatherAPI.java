@@ -2,6 +2,7 @@ package com.example.photogallery;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class WeatherAPI extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "GalleryActivityWeather";
+    public AsyncResponse delegate = null;
 
     @Override
     protected String doInBackground(String... strings) {
@@ -48,8 +50,8 @@ public class WeatherAPI extends AsyncTask<String, Void, String> {
         requestBuilder.append("?").append(paramBuilder);
 
         HttpURLConnection conn = null;
+        StringBuffer response = new StringBuffer();
         try {
-
             //set up the connection
             URL url = new URL(requestBuilder.toString());
             //URL url = new URL("http://www.android.com/");
@@ -66,7 +68,7 @@ public class WeatherAPI extends AsyncTask<String, Void, String> {
                 Log.e(TAG, "I got an error", e);
             }
 
-            StringBuffer response = new StringBuffer();
+
             try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(isSuccess ? conn.getInputStream() : conn.getErrorStream()))
             ) {
@@ -86,14 +88,19 @@ public class WeatherAPI extends AsyncTask<String, Void, String> {
 
             //pass the string response to be parsed and used
             //parseWeatherDataJson(response.toString());
-            return response.toString();
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (conn != null) {
                 conn.disconnect();
             }
-            return apiEndPoint;
         }
+        return response.toString();
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        delegate.processFinish(result);
     }
 }
