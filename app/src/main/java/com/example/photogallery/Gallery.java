@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,17 +27,23 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 
-public class Gallery extends AppCompatActivity {
+public class Gallery extends AppCompatActivity implements AsyncResponse {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
@@ -55,6 +62,10 @@ public class Gallery extends AppCompatActivity {
     private Double longMin = -999.9;
     private Double longMax = 999.9;
 
+    private static final String TAG = "GalleryActivity";
+    WeatherAPI asyncTask =new WeatherAPI();
+    private TextView tvWeather ;
+
     // upon entering gallery view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +75,7 @@ public class Gallery extends AppCompatActivity {
 
         tvLatitude = (TextView) findViewById(R.id.latitude);
         tvLongitude = (TextView) findViewById(R.id.longitude);
+        tvWeather = (TextView)findViewById(R.id.tvWeather);
 
         // update list of photos
         photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
@@ -75,13 +87,96 @@ public class Gallery extends AppCompatActivity {
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //check permission
 
+
+    }
+
+    private void callWeatherAPI()
+    {
+        String weatherURLstring = createWeatherURL();
+
+        //this to set delegate/listener back to this class
+        asyncTask.delegate = this;
+
+        //execute the async task
+        asyncTask.execute(weatherURLstring);
+    }
+
+    private String createWeatherURL()
+    {
+        String apiEndPoint = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
+        //String location = "Langley, BC, CA";
+        String latitude = tvLatitude.getText().toString();
+        String longitude = tvLongitude.getText().toString();
+        //String startDate = "2021-4-7"; //optional
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        String startDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(now);
+        String unitGroup = "metric"; //us,metric,uk
+        String apiKey = "F3SHHHG8JTW3X9YECHGC9SFR7"; //sign up for a free api key at https://www.visualcrossing.com/weather/weather-data-services
+
+        String method = "GET"; // GET OR POST
+
+        //Build the URL pieces
+        StringBuilder requestBuilder = new StringBuilder(apiEndPoint);
+        //requestBuilder.append(location);
+        requestBuilder.append(latitude).append(",");
+        requestBuilder.append(longitude);
+
+        if (startDate != null && !startDate.isEmpty()) {
+            requestBuilder.append("/").append(startDate);
+        }
+
+        //Build the parameters to send via GET or POST
+        StringBuilder paramBuilder = new StringBuilder();
+        paramBuilder.append("&").append("unitGroup=").append(unitGroup);
+        paramBuilder.append("&").append("key=").append(apiKey);
+        paramBuilder.append("&").append("include=obs");
+
+        // add the parameters to the request
+        requestBuilder.append("?").append(paramBuilder);
+
+        return requestBuilder.toString();
+    }
+
+    //this override the implemented method from asyncTask
+    @Override
+    public void processFinish(String output){
+        //Here you will receive the result fired from async class
+        //of onPostExecute(result) method.
+
+        try {
+            parseWeatherDataJson(output);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseWeatherDataJson(String rawResult) throws JSONException {
+
+        if (rawResult==null || rawResult.isEmpty()) {
+            Log.d(TAG,"No raw data%n");
+            return;
+        }
+
+        JSONObject timelineResponse = new JSONObject(rawResult);
+
+        Log.d(TAG,"Weather data for: " + timelineResponse.getString("resolvedAddress"));
+
+        JSONArray values=timelineResponse.getJSONArray("days");
+
+        for (int i = 0; i < values.length(); i++) {
+            JSONObject dayValue = values.getJSONObject(i);
+
+            String conditions = dayValue.getString("conditions");
+            Log.d(TAG, "Conditions: " + conditions);
+            tvWeather.setText(conditions);
+        }
     }
 
     // get last location and write it on the screen
     @SuppressLint("MissingPermission")
-    private void getLocation() {
+    private void getLocationAndWeather() {
         // if location permission is granted
         if (checkPermissions())
         {
@@ -99,6 +194,8 @@ public class Gallery extends AppCompatActivity {
                         tvLatitude.setText(String.valueOf(location.getLatitude()));
                         tvLongitude.setText(String.valueOf(location.getLongitude()));
                     }
+                    // get weather data
+                    callWeatherAPI();
                 }
             });
 
@@ -233,8 +330,10 @@ public class Gallery extends AppCompatActivity {
         updatePhoto(photoPathList.get(photoIndex),
                 ((EditText) findViewById(R.id.editTextCaption)).getText().toString(),
                 tvLatitude.getText().toString(),
-                tvLongitude.getText().toString()
+                tvLongitude.getText().toString(),
+                tvWeather.getText().toString()
         );
+
         // update list of photos to have the correct filenames
         if (startTimestamp == null){
             photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");  // JP
@@ -278,7 +377,15 @@ public class Gallery extends AppCompatActivity {
             et.setText(attr[1]);
             // set photo timestamp
             tv.setText(attr[2] + "_" + attr [3]);
-            if(attr.length >= 6)
+            if(attr.length >= 8)
+            {
+                tvWeather.setText(attr[6]);
+            }
+            else
+            {
+                tvWeather.setText("Weather");
+            }
+            if(attr.length >= 7)
             {
                 tvLatitude.setText(attr[4]);
                 tvLongitude.setText(attr[5]);
@@ -288,6 +395,7 @@ public class Gallery extends AppCompatActivity {
                 //tvLatitude.setText("Latitude");
                 //tvLongitude.setText("Longitude");
             }
+
         }
     }
 
@@ -296,7 +404,7 @@ public class Gallery extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_000_111_"; // 000 and 111 in place of long and lat
+        String imageFileName = "_caption_" + timeStamp + "_000_111_" + "_weather_"; // 000 and 111 in place of long and lat
         // create the image file and store it the image file in the pictures directory
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
@@ -327,8 +435,8 @@ public class Gallery extends AppCompatActivity {
             photoIndex = photoPathList.size()-1;
             displayPhoto(photoPathList.get(photoIndex));
 
-            // get the current location
-            getLocation();
+            // get the current location and weather
+            getLocationAndWeather();
         }
     }
 
@@ -388,9 +496,16 @@ public class Gallery extends AppCompatActivity {
 
     // when scrollPhotos runs ("Left or "Right" button pressed)
     // update the currently displayed pictures filename with the textbox caption
-    private void updatePhoto(String path, String caption, String latitude, String longitude) {
+    private void updatePhoto(String path, String caption, String latitude, String longitude, String weather) {
         String[] attr = path.split("_");
-        if (attr.length >= 6)
+        if (attr.length >= 8)
+        {
+            File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
+                    latitude + "_" + longitude + "_" + weather + "_.jpg");
+            File from = new File(path);
+            from.renameTo(to);
+        }
+        else if (attr.length >= 7)
         {
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
                     latitude + "_" + longitude + "_.jpg");

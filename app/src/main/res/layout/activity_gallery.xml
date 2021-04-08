@@ -102,6 +102,12 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
+            android:id="@+id/tvWeather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Weather" />
+
+        <TextView
             android:id="@+id/textViewTimeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -111,6 +117,9 @@
             android:text="TIME STAMP"
             android:textSize="18sp" />
 
+        //android:hint="@string/edit_caption"
+
+
         <EditText
             android:id="@+id/editTextCaption"
             android:layout_width="160dp"
@@ -119,9 +128,6 @@
             android:layout_marginLeft="150dp"
             android:inputType="textPersonName"
             android:text="" />
-
-        //android:hint="@string/edit_caption"
-
 
         <Button
             android:id="@+id/buttonLeft"
