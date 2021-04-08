@@ -330,7 +330,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         updatePhoto(photoPathList.get(photoIndex),
                 ((EditText) findViewById(R.id.editTextCaption)).getText().toString(),
                 tvLatitude.getText().toString(),
-                tvLongitude.getText().toString()
+                tvLongitude.getText().toString(),
+                tvWeather.getText().toString()
         );
 
         // update list of photos to have the correct filenames
@@ -376,7 +377,15 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
             et.setText(attr[1]);
             // set photo timestamp
             tv.setText(attr[2] + "_" + attr [3]);
-            if(attr.length >= 6)
+            if(attr.length >= 8)
+            {
+                tvWeather.setText(attr[6]);
+            }
+            else
+            {
+                tvWeather.setText("Weather");
+            }
+            if(attr.length >= 7)
             {
                 tvLatitude.setText(attr[4]);
                 tvLongitude.setText(attr[5]);
@@ -386,6 +395,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
                 //tvLatitude.setText("Latitude");
                 //tvLongitude.setText("Longitude");
             }
+
         }
     }
 
@@ -394,7 +404,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_000_111_"; // 000 and 111 in place of long and lat
+        String imageFileName = "_caption_" + timeStamp + "_000_111_" + "_weather_"; // 000 and 111 in place of long and lat
         // create the image file and store it the image file in the pictures directory
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
@@ -486,9 +496,16 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
 
     // when scrollPhotos runs ("Left or "Right" button pressed)
     // update the currently displayed pictures filename with the textbox caption
-    private void updatePhoto(String path, String caption, String latitude, String longitude) {
+    private void updatePhoto(String path, String caption, String latitude, String longitude, String weather) {
         String[] attr = path.split("_");
-        if (attr.length >= 6)
+        if (attr.length >= 8)
+        {
+            File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
+                    latitude + "_" + longitude + "_" + weather + "_.jpg");
+            File from = new File(path);
+            from.renameTo(to);
+        }
+        else if (attr.length >= 7)
         {
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
                     latitude + "_" + longitude + "_.jpg");
