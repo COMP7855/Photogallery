@@ -31,22 +31,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class Gallery extends AppCompatActivity implements AsyncResponse {
@@ -81,6 +75,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
 
         tvLatitude = (TextView) findViewById(R.id.latitude);
         tvLongitude = (TextView) findViewById(R.id.longitude);
+        tvWeather = (TextView)findViewById(R.id.tvWeather);
 
         // update list of photos
         photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
@@ -92,15 +87,56 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //check permission
+
+
+    }
+
+    private void callWeatherAPI()
+    {
+        String weatherURLstring = createWeatherURL();
 
         //this to set delegate/listener back to this class
         asyncTask.delegate = this;
 
         //execute the async task
-        asyncTask.execute();
+        asyncTask.execute(weatherURLstring);
+    }
 
-        tvWeather = (TextView)findViewById(R.id.tvWeather);
+    private String createWeatherURL()
+    {
+        String apiEndPoint = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
+        //String location = "Langley, BC, CA";
+        String latitude = tvLatitude.getText().toString();
+        String longitude = tvLongitude.getText().toString();
+        //String startDate = "2021-4-7"; //optional
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        String startDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(now);
+        String unitGroup = "metric"; //us,metric,uk
+        String apiKey = "F3SHHHG8JTW3X9YECHGC9SFR7"; //sign up for a free api key at https://www.visualcrossing.com/weather/weather-data-services
+
+        String method = "GET"; // GET OR POST
+
+        //Build the URL pieces
+        StringBuilder requestBuilder = new StringBuilder(apiEndPoint);
+        //requestBuilder.append(location);
+        requestBuilder.append(latitude).append(",");
+        requestBuilder.append(longitude);
+
+        if (startDate != null && !startDate.isEmpty()) {
+            requestBuilder.append("/").append(startDate);
+        }
+
+        //Build the parameters to send via GET or POST
+        StringBuilder paramBuilder = new StringBuilder();
+        paramBuilder.append("&").append("unitGroup=").append(unitGroup);
+        paramBuilder.append("&").append("key=").append(apiKey);
+        paramBuilder.append("&").append("include=obs");
+
+        // add the parameters to the request
+        requestBuilder.append("?").append(paramBuilder);
+
+        return requestBuilder.toString();
     }
 
     //this override the implemented method from asyncTask
@@ -116,71 +152,6 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         }
     }
 
-    /*
-    public static void weatherAPIrequest() throws Exception {
-        String apiEndPoint="https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
-        String location="Langley, BC, CA";
-        String startDate="2021-4-7"; //optional
-        String unitGroup="metric"; //us,metric,uk
-        String apiKey="F3SHHHG8JTW3X9YECHGC9SFR7"; //sign up for a free api key at https://www.visualcrossing.com/weather/weather-data-services
-
-        String method="GET"; // GET OR POST
-
-        //Build the URL pieces
-        StringBuilder requestBuilder=new StringBuilder(apiEndPoint);
-        requestBuilder.append(location);
-
-        if (startDate!=null && !startDate.isEmpty()) {
-            requestBuilder.append("/").append(startDate);
-        }
-
-        //Build the parameters to send via GET or POST
-        StringBuilder paramBuilder=new StringBuilder();
-        paramBuilder.append("&").append("unitGroup=").append(unitGroup);
-        paramBuilder.append("&").append("key=").append(apiKey);
-
-        // add the parameters to the request
-        requestBuilder.append("?").append(paramBuilder);
-
-        //set up the connection
-        //URL url = new URL(requestBuilder.toString());
-        URL url = new URL("http://www.android.com/");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-
-        //check the response code and set up the reader for the appropriate stream
-        int responseCode = 0;
-        boolean isSuccess = false;
-        try{
-            responseCode = conn.getResponseCode();
-            isSuccess=responseCode==200;
-        }
-        catch (Exception e) {
-            Log.e(TAG, "I got an error", e);
-        }
-
-        StringBuffer response = new StringBuffer();
-        try (
-                BufferedReader in = new BufferedReader(new InputStreamReader(isSuccess?conn.getInputStream():conn.getErrorStream()))
-        ) {
-
-            //read the response
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-        }
-        if (!isSuccess) {
-            Log.d(TAG, "Bad response status code:" + responseCode + response.toString());
-
-            return;
-        }
-
-        //pass the string response to be parsed and used
-        parseWeatherDataJson(response.toString());
-    }
-*/
     private void parseWeatherDataJson(String rawResult) throws JSONException {
 
         if (rawResult==null || rawResult.isEmpty()) {
@@ -205,7 +176,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
 
     // get last location and write it on the screen
     @SuppressLint("MissingPermission")
-    private void getLocation() {
+    private void getLocationAndWeather() {
         // if location permission is granted
         if (checkPermissions())
         {
@@ -223,6 +194,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
                         tvLatitude.setText(String.valueOf(location.getLatitude()));
                         tvLongitude.setText(String.valueOf(location.getLongitude()));
                     }
+                    // get weather data
+                    callWeatherAPI();
                 }
             });
 
@@ -359,6 +332,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
                 tvLatitude.getText().toString(),
                 tvLongitude.getText().toString()
         );
+
         // update list of photos to have the correct filenames
         if (startTimestamp == null){
             photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");  // JP
@@ -451,8 +425,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
             photoIndex = photoPathList.size()-1;
             displayPhoto(photoPathList.get(photoIndex));
 
-            // get the current location
-            getLocation();
+            // get the current location and weather
+            getLocationAndWeather();
         }
     }
 
@@ -529,9 +503,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         }
     }
 
-    public void onButtonClick_delete(View v) throws Exception {
-        Log.d(TAG, "delete button pressed");
-        //weatherAPIrequest();
-        new WeatherAPI().execute();
+    public void onButtonClick_delete(View v) {
+
     }
 }

@@ -21,53 +21,6 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="161dp"
-            android:background="#D2A1C7D8"
-            android:orientation="vertical">
-
-
-            <ImageView
-                android:layout_width="152dp"
-                android:layout_height="145dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:contentDescription="Profile Pic"
-                android:foreground="@drawable/avatar"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="165dp"
-                android:layout_marginLeft="165dp"
-                android:layout_marginTop="-130dp"
-                android:text="Name"
-                android:textSize="30sp"
-                android:textStyle="bold|italic" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="22dp"
-                android:layout_marginStart="250dp"
-                android:layout_marginLeft="250dp"
-                android:layout_marginTop="-28dp"
-                android:background="#D2A1C7D8"
-                android:contentDescription="Edit Icon"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
-
-            <TextView
-                android:layout_width="174dp"
-                android:layout_height="34dp"
-                android:layout_marginStart="165dp"
-                android:layout_marginLeft="165dp"
-                android:layout_marginTop="5dp"
-                android:text="Lv. 10 Photographer" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="42dp"
             android:orientation="horizontal">
 

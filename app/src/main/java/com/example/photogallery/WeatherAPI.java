@@ -25,35 +25,12 @@ public class WeatherAPI extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        String apiEndPoint = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
-        String location = "Langley, BC, CA";
-        String startDate = "2021-4-7"; //optional
-        String unitGroup = "metric"; //us,metric,uk
-        String apiKey = "F3SHHHG8JTW3X9YECHGC9SFR7"; //sign up for a free api key at https://www.visualcrossing.com/weather/weather-data-services
-
-        String method = "GET"; // GET OR POST
-
-        //Build the URL pieces
-        StringBuilder requestBuilder = new StringBuilder(apiEndPoint);
-        requestBuilder.append(location);
-
-        if (startDate != null && !startDate.isEmpty()) {
-            requestBuilder.append("/").append(startDate);
-        }
-
-        //Build the parameters to send via GET or POST
-        StringBuilder paramBuilder = new StringBuilder();
-        paramBuilder.append("&").append("unitGroup=").append(unitGroup);
-        paramBuilder.append("&").append("key=").append(apiKey);
-
-        // add the parameters to the request
-        requestBuilder.append("?").append(paramBuilder);
 
         HttpURLConnection conn = null;
         StringBuffer response = new StringBuffer();
         try {
             //set up the connection
-            URL url = new URL(requestBuilder.toString());
+            URL url = new URL(strings[0].toString());
             //URL url = new URL("http://www.android.com/");
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
