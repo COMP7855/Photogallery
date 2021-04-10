@@ -102,17 +102,19 @@
 
         <TextView
             android:id="@+id/tvWeather"
-            android:layout_width="match_parent"
+            android:layout_width="162dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="120dp"
+            android:layout_marginLeft="120dp"
             android:text="Weather" />
 
         <TextView
             android:id="@+id/textViewTimeStamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="165dp"
-            android:layout_marginLeft="165dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="145dp"
+            android:layout_marginLeft="145dp"
+            android:layout_marginTop="18dp"
             android:text="TIME STAMP"
             android:textSize="18sp" />
 
@@ -123,69 +125,66 @@
             android:id="@+id/editTextCaption"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
-            android:layout_marginLeft="150dp"
+            android:layout_marginStart="140dp"
+            android:layout_marginLeft="140dp"
             android:inputType="textPersonName"
             android:text="" />
-
-        <Button
-            android:id="@+id/buttonLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="25dp"
-            android:background="#1C88DF"
-            android:onClick="scrollPhotos"
-            android:text="Left"
-            app:backgroundTint="#2196f3" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="160dp"
             android:layout_marginLeft="160dp"
-            android:layout_marginTop="-48dp"
+            android:layout_marginTop="10dp"
             android:background="#1C88DF"
             android:onClick="onButtonClick_camera"
             android:text="SNAP"
             app:backgroundTint="#2196f3" />
 
         <Button
-            android:id="@+id/buttonRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="280dp"
-            android:layout_marginLeft="280dp"
-            android:layout_marginTop="-49dp"
-            android:background="#1C88DF"
-            android:onClick="scrollPhotos"
-            android:text="RIGHT"
-            app:backgroundTint="#2196f3" />
-
-        <Button
             android:id="@+id/buttonDelete"
             android:layout_width="367dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
             android:onClick="onButtonClick_delete"
             android:text="Delete" />
 
         <TextView
-            android:id="@+id/latitude"
-            android:layout_width="100dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
+            android:id="@+id/longitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="300dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="21dp"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/longitude"
-            android:layout_width="110dp"
-            android:layout_height="35dp"
+            android:id="@+id/textView3"
+            android:layout_width="79dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="200dp"
             android:layout_marginLeft="200dp"
-            android:layout_marginTop="-35dp"
+            android:layout_marginTop="-18dp"
+            android:text="Longitude" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="68dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="-18dp"
+            android:text="Latitude:" />
+
+        <TextView
+            android:id="@+id/latitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="-21dp"
             android:text="TextView" />
 
         <!--set text in edit text-->

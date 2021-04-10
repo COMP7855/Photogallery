@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.view.GestureDetectorCompat;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
@@ -21,6 +22,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -43,12 +47,12 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class Gallery extends AppCompatActivity implements AsyncResponse {
+public class Gallery extends AppCompatActivity implements AsyncResponse{
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
     private ArrayList<String> photoPathList = null;
-    private int photoIndex = 0;
+    public int photoIndex = 0;
     private Date startTimestamp = null;
     private Date endTimestamp = null; //JP
     private String keywords = null; //JP
@@ -66,12 +70,17 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
     WeatherAPI asyncTask =new WeatherAPI();
     private TextView tvWeather ;
 
+    private static final String DEBUG_TAG = "Gestures";
+    private GestureDetectorCompat mDetector;
+
     // upon entering gallery view
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
 
         tvLatitude = (TextView) findViewById(R.id.latitude);
         tvLongitude = (TextView) findViewById(R.id.longitude);
@@ -87,8 +96,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    }
 
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.mDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     private void callWeatherAPI()
@@ -325,7 +338,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
     }
 
     // when the "Left" or "Right" buttons are pressed
-    public void scrollPhotos(View v) {
+    public void scrollPhotos(float velocity) {
         // update current photo's filename using caption text
         updatePhoto(photoPathList.get(photoIndex),
                 ((EditText) findViewById(R.id.editTextCaption)).getText().toString(),
@@ -343,20 +356,17 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         }
 
         // increase or decrease index depending on button press
-        switch (v.getId()) {
-            case R.id.buttonLeft:
+            if (velocity > 0) {
                 if (photoIndex > 0) {
                     photoIndex--;
                 }
-                break;
-            case R.id.buttonRight:
-                if (photoIndex < (photoPathList.size()-1)) {
-                photoIndex++;
+             }
+            else {
+                if (photoIndex < (photoPathList.size() - 1)) {
+                    photoIndex++;
+                }
             }
-            break;
-            default:
-                break;
-        }
+
         // display the picture with the current index value
         displayPhoto(photoPathList.get(photoIndex));
     }
@@ -549,4 +559,24 @@ public class Gallery extends AppCompatActivity implements AsyncResponse {
         }
 
     }
+
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String DEBUG_TAG = "Gestures";
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
+            Log.d(DEBUG_TAG, "onFling: " + velocityX);
+            scrollPhotos(velocityX);
+            return true;
+        }
+    }
+
+
 }
