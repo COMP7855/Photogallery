@@ -338,7 +338,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     }
 
     // when the "Left" or "Right" buttons are pressed
-    public void scrollPhotos(View v) {
+    public void scrollPhotos(float velocity) {
         // update current photo's filename using caption text
         updatePhoto(photoPathList.get(photoIndex),
                 ((EditText) findViewById(R.id.editTextCaption)).getText().toString(),
@@ -356,20 +356,17 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
 
         // increase or decrease index depending on button press
-        switch (v.getId()) {
-            case R.id.buttonLeft:
+            if (velocity > 0) {
                 if (photoIndex > 0) {
                     photoIndex--;
                 }
-                break;
-            case R.id.buttonRight:
-                if (photoIndex < (photoPathList.size()-1)) {
-                photoIndex++;
+             }
+            else {
+                if (photoIndex < (photoPathList.size() - 1)) {
+                    photoIndex++;
+                }
             }
-            break;
-            default:
-                break;
-        }
+
         // display the picture with the current index value
         displayPhoto(photoPathList.get(photoIndex));
     }
@@ -575,6 +572,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
+            Log.d(DEBUG_TAG, "onFling: " + velocityX);
+            scrollPhotos(velocityX);
             return true;
         }
     }
