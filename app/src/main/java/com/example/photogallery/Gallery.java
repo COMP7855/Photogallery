@@ -47,13 +47,12 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class Gallery extends AppCompatActivity implements AsyncResponse,GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener{
+public class Gallery extends AppCompatActivity implements AsyncResponse{
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
     private ArrayList<String> photoPathList = null;
-    private int photoIndex = 0;
+    public int photoIndex = 0;
     private Date startTimestamp = null;
     private Date endTimestamp = null; //JP
     private String keywords = null; //JP
@@ -81,10 +80,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse,GestureD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        mDetector = new GestureDetectorCompat(this,this);
-        // Set the gesture detector as the double tap
-        // listener.
-        mDetector.setOnDoubleTapListener(this);
+        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
 
         tvLatitude = (TextView) findViewById(R.id.latitude);
         tvLongitude = (TextView) findViewById(R.id.longitude);
@@ -100,8 +96,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse,GestureD
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+    }
 
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.mDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 
     private void callWeatherAPI()
@@ -563,50 +563,21 @@ public class Gallery extends AppCompatActivity implements AsyncResponse,GestureD
 
     }
 
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-        return false;
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String DEBUG_TAG = "Gestures";
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
+            return true;
+        }
     }
 
-    @Override
-    public boolean onDoubleTap(MotionEvent e) {
-        return false;
-    }
 
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-        Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
-        Log.d(DEBUG_TAG, "onFling: " + velocityX);
-        return true;
-    }
 }
