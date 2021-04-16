@@ -43,6 +43,7 @@ public class Gallery extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_VIDEO_CAPTURE = 1; //JK
     String mCurrentPhotoPath;
+    String currentVideoPath;
     private ArrayList<String> photoPathList = null;
     private int photoIndex = 0;
     private Date startTimestamp = null;
@@ -188,12 +189,22 @@ public class Gallery extends AppCompatActivity {
             }
         }
     }
-    /* Called when the user taps the video button */ //JK
+    /* Called when the user taps the video button */
     @SuppressLint("QueryPermissionsNeeded")
     public void takeVideo(View view) {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+            File videoFile = null;
+            try{
+                videoFile = createVideoFile();
+            }catch (IOException ex){
+                // Error occurred while creating the File
+            }
+            if(videoFile != null){
+                Uri videoURI = FileProvider.getUriForFile(this,"com.example.photogallery.fileprovider",videoFile);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT,videoURI);
+                startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+            }
         }
     }
 
@@ -275,16 +286,32 @@ public class Gallery extends AppCompatActivity {
 
     // display the photo
     private void displayPhoto(String path) {
+        VideoView vd = findViewById(R.id.videoView);
         ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
         TextView tv = (TextView) findViewById(R.id.textViewTimeStamp);
         EditText et = (EditText) findViewById(R.id.editTextCaption);
         if (path == null || path =="") {
+            iv.setAlpha(1.0f);
+            vd.setAlpha(0.0f);
             iv.setImageResource(R.mipmap.ic_launcher);
             et.setText("");
             tv.setText("");
         } else {
-            iv.setImageBitmap(BitmapFactory.decodeFile(path));
             String[] attr = path.split("_");
+            if(attr[7].equals("VID")) {
+                iv.setAlpha(0.0f);
+                vd.setAlpha(1.0f);
+                vd.setVideoPath(path);
+                MediaController md = new MediaController(this);
+                md.setAnchorView(vd);
+                vd.setMediaController(md);
+                vd.start();
+            }
+            else{
+                iv.setAlpha(1.0f);
+                vd.setAlpha(0.0f);
+                iv.setImageBitmap(BitmapFactory.decodeFile(path));
+            }
             // set photo caption
             et.setText(attr[1]);
             // set photo timestamp
@@ -307,12 +334,26 @@ public class Gallery extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_000_111_"; // 000 and 111 in place of long and lat
+        String imageFileName = "_caption_" + timeStamp + "_000_111_weather_IMG"; // 000 and 111 in place of long and lat
         // create the image file and store it the image file in the pictures directory
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+    /* Return a unique file name for a video using data-time stamp*/
+    private File createVideoFile() throws IOException {
+        // Create an video file name
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() );
+        String videoFileName = "MP4_" + timeStamp + "_000_111_weather_VID";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File video = File.createTempFile(
+                videoFileName,  /* prefix */
+                ".mp4",   /* suffix */
+                storageDir      /* directory */
+        );
+        currentVideoPath = video.getAbsolutePath();
+        return video;
     }
 
     // when a picture has been taken in the camera app
@@ -343,14 +384,9 @@ public class Gallery extends AppCompatActivity {
         }
         /*If take an video*/ //JK
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-            Uri videoUri = data.getData();
-            VideoView vd = findViewById(R.id.videoView);
-            vd.setVideoURI(videoUri);
-            MediaController md = new MediaController(this);
-            md.setAnchorView(vd);
-            vd.setMediaController(md);
-            vd.setAlpha(1);
-            vd.start();
+            photoPathList = findPhotos(new Date(Long.MIN_VALUE),new Date(),"");
+            photoIndex = photoPathList.size()-1;
+            displayPhoto(photoPathList.get(photoIndex));
         }
     }
 
