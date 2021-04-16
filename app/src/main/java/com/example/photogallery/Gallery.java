@@ -413,7 +413,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     // called from "Snap" button function onButtonClick_camera
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA).format(new Date());
         String imageFileName = "_caption_" + timeStamp + "_000_111_" + "_weather_"; // 000 and 111 in place of long and lat
         // create the image file and store it the image file in the pictures directory
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);

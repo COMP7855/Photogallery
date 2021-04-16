@@ -30,7 +30,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
-                android:contentDescription="Profile Pic"
+                android:contentDescription="@string/profile_pic"
                 android:foreground="@drawable/avatar"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -40,7 +40,7 @@
                 android:layout_marginStart="165dp"
                 android:layout_marginLeft="165dp"
                 android:layout_marginTop="-130dp"
-                android:text="Name"
+                android:text="@string/name"
                 android:textSize="30sp"
                 android:textStyle="bold|italic" />
 
@@ -51,7 +51,7 @@
                 android:layout_marginLeft="250dp"
                 android:layout_marginTop="-28dp"
                 android:background="#D2A1C7D8"
-                android:contentDescription="Edit Icon"
+                android:contentDescription="@string/edit_icon"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_marginStart="165dp"
                 android:layout_marginLeft="165dp"
                 android:layout_marginTop="5dp"
-                android:text="Lv. 10 Photographer" />
+                android:text="@string/photographer_info" />
 
         </LinearLayout>
 
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#D2A1C7D8"
-                android:contentDescription="Search Icon"
+                android:contentDescription="@string/search_icon"
                 android:onClick="onButtonClick_search"
                 app:srcCompat="@android:drawable/ic_menu_search" />
 
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#D2A1C7D8"
-                android:contentDescription="Upload Icon"
+                android:contentDescription="@string/upload_icon"
                 android:onClick="onButtonClick_share"
                 app:srcCompat="@android:drawable/ic_menu_upload" />
         </LinearLayout>
@@ -96,7 +96,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="20dp"
-            android:contentDescription="Gallery Pic"
+            android:contentDescription="@string/gallery_pic"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="120dp"
             android:layout_marginLeft="120dp"
-            android:text="Weather" />
+            android:text="@string/weather" />
 
         <TextView
             android:id="@+id/textViewTimeStamp"
@@ -114,11 +114,8 @@
             android:layout_marginStart="130dp"
             android:layout_marginLeft="130dp"
             android:layout_marginTop="10dp"
-            android:text="TIME STAMP"
+            android:text="@string/time_stamp"
             android:textSize="18sp" />
-
-        //android:hint="@string/edit_caption"
-
 
         <EditText
             android:id="@+id/editTextCaption"
@@ -126,8 +123,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="110dp"
             android:layout_marginLeft="110dp"
+            android:hint="@string/edit_icon"
             android:inputType="textPersonName"
-            android:text="Caption" />
+            android:text="@string/caption" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -142,7 +140,7 @@
                 android:layout_marginTop="10dp"
                 android:background="#1C88DF"
                 android:onClick="onButtonClick_camera"
-                android:text="SNAP"
+                android:text="@string/snap"
                 app:backgroundTint="#2196f3" />
 
             <Button
@@ -154,7 +152,7 @@
                 android:layout_marginTop="10dp"
                 android:background="#FFFFFF"
                 android:onClick="onButtonClick_delete"
-                android:text="Delete" />
+                android:text="@string/delete" />
         </LinearLayout>
 
         <TextView
@@ -164,7 +162,7 @@
             android:layout_marginStart="300dp"
             android:layout_marginLeft="300dp"
             android:layout_marginTop="21dp"
-            android:text="TextView" />
+            android:text="@string/longitude" />
 
         <TextView
             android:id="@+id/textView3"
@@ -173,7 +171,7 @@
             android:layout_marginStart="200dp"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="-18dp"
-            android:text="Longitude" />
+            android:text="@string/longitude" />
 
         <TextView
             android:id="@+id/textView2"
@@ -182,7 +180,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="-18dp"
-            android:text="Latitude:" />
+            android:text="@string/latitude" />
 
         <TextView
             android:id="@+id/latitude"
@@ -191,7 +189,7 @@
             android:layout_marginStart="100dp"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="-21dp"
-            android:text="TextView" />
+            android:text="@string/latitude" />
 
         <!--set text in edit text-->
 

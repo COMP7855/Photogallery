@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">PhotoGallery</string>
+
+    <string name="profile_pic">Profile Pic</string>
+    <string name="name">Name</string>
+    <string name="edit_icon">Edit Icon</string>
+    <string name="photographer_info">Lv. 10 Photographer</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="upload_icon">Upload Icon</string>
+    <string name="gallery_pic">Gallery Pic</string>
+    <string name="weather">Weather</string>
+    <string name="time_stamp">Time Stamp</string>
+    <string name="edit_caption">Edit Caption</string>
+    <string name="caption">Caption</string>
+    <string name="snap">Snap</string>
+    <string name="delete">Delete</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+
+    <string name="start_time">START TIME:</string>
+    <string name="end_time">END TIME:</string>
+    <string name="keyword">KEYWORD:</string>
+    <string name="max_lat">MAX LAT:</string>
+    <string name="min_lat">MIN LAT:</string>
+    <string name="min_long">MIN LONG:</string>
+    <string name="max_long">MAX LONG:</string>
+    <string name="okay">OK</string>
+    <string name="cancel">CANCEL</string>
+
+    <string name="enter_start_time">Enter Start Time</string>
+    <string name="enter_min_lat">Enter minimum latitude</string>
+    <string name="enter_max_lat">Enter maximum latitude</string>
+    <string name="enter_min_long">Enter minimum longitude</string>
+    <string name="enter_max_long">Enter maximum longitude</string>
 </resources>
