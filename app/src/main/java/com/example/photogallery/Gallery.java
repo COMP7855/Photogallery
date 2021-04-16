@@ -52,6 +52,7 @@ import java.util.Locale;
 public class Gallery extends AppCompatActivity implements AsyncResponse{
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 1;
     String mCurrentPhotoPath;
     String currentVideoPath;
     private ArrayList<String> photoPathList = null;
