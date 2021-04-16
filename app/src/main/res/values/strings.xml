@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">PhotoGallery</string>
+<<<<<<< Updated upstream
 
     <string name="profile_pic">Profile Pic</string>
     <string name="name">Name</string>
@@ -32,4 +33,8 @@
     <string name="enter_max_lat">Enter maximum latitude</string>
     <string name="enter_min_long">Enter minimum longitude</string>
     <string name="enter_max_long">Enter maximum longitude</string>
+=======
+    <string name="VideoView_gallery">Videos</string>
+    <string name="button_video">Video</string>
+>>>>>>> Stashed changes
 </resources>

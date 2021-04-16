@@ -87,8 +87,29 @@
                 android:contentDescription="@string/upload_icon"
                 android:onClick="onButtonClick_share"
                 app:srcCompat="@android:drawable/ic_menu_upload" />
-        </LinearLayout>
 
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="390dp"
+            android:layout_height="270dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageViewPic"
+                android:layout_width="334dp"
+                android:layout_height="246dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="20dp"
+                android:contentDescription="Gallery Pic"
+                tools:srcCompat="@tools:sample/avatars" />
+
+<<<<<<< Updated upstream
         <ImageView
             android:id="@+id/imageViewPic"
             android:layout_width="334dp"
@@ -98,6 +119,15 @@
             android:layout_marginTop="20dp"
             android:contentDescription="@string/gallery_pic"
             tools:srcCompat="@tools:sample/avatars" />
+=======
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:contentDescription="@string/VideoView_gallery" />
+        </FrameLayout>
+>>>>>>> Stashed changes
 
         <TextView
             android:id="@+id/tvWeather"
@@ -135,8 +165,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_marginStart="80dp"
-                android:layout_marginLeft="80dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginLeft="50dp"
                 android:layout_marginTop="10dp"
                 android:background="#1C88DF"
                 android:onClick="onButtonClick_camera"
@@ -152,7 +182,23 @@
                 android:layout_marginTop="10dp"
                 android:background="#FFFFFF"
                 android:onClick="onButtonClick_delete"
+<<<<<<< Updated upstream
                 android:text="@string/delete" />
+=======
+                android:text="Delete" />
+
+            <Button
+                android:id="@+id/video"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:background="#1C88DF"
+                android:onClick="takeVideo"
+                android:text="@string/button_video" />
+
+>>>>>>> Stashed changes
         </LinearLayout>
 
         <TextView
