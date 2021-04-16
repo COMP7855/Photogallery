@@ -73,7 +73,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private static final String DEBUG_TAG = "Gestures";
     private GestureDetectorCompat mDetector;
 
+
+    //########################################################
+    //
     // upon entering gallery view
+    //
+    //########################################################
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -98,11 +103,22 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
+    //########################################################
+    //
+    //Function that enables the the use of touch gestures
+    //
+    //########################################################
     @Override
     public boolean onTouchEvent(MotionEvent event){
         this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
+
+    //########################################################
+    //
+    //Function that enables the use of the Weather API
+    //
+    //########################################################
 
     private void callWeatherAPI()
     {
@@ -114,7 +130,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         //execute the async task
         asyncTask.execute(weatherURLstring);
     }
-
+    //########################################################
+    //
+    //Build a URL from the latitude, longitude and date and then uses a HTTP request to connect
+    // to a website that gives the weather
+    //
+    //########################################################
     private String createWeatherURL()
     {
         String apiEndPoint = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
@@ -152,7 +173,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         return requestBuilder.toString();
     }
 
+
+    //########################################################
+    //
     //this override the implemented method from asyncTask
+    //
+    //########################################################
     @Override
     public void processFinish(String output){
         //Here you will receive the result fired from async class
@@ -164,7 +190,11 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             e.printStackTrace();
         }
     }
-
+    //########################################################
+    //
+    // get last location and write it on the screen
+    //
+    //########################################################
     private void parseWeatherDataJson(String rawResult) throws JSONException {
 
         if (rawResult==null || rawResult.isEmpty()) {
@@ -187,7 +217,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
     }
 
+
+    //########################################################
+    //
     // get last location and write it on the screen
+    //
+    //########################################################
     @SuppressLint("MissingPermission")
     private void getLocationAndWeather() {
         // if location permission is granted
@@ -214,8 +249,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
 
         }
     }
-
+    //########################################################
+    //
     // check location permissions
+    //
+    //########################################################
+
     private boolean checkPermissions()
     {
         if (ActivityCompat.checkSelfPermission
@@ -230,7 +269,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
     }
 
+
+    //########################################################
+    //
     // request location permissions
+    //
+    //########################################################
     private void requestPermissions()
     {
         ActivityCompat.requestPermissions
@@ -239,7 +283,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
                         44);
     }
 
+
+    //########################################################
+    //
     // when search button is pressed, open Search Activity
+    //
+    //########################################################
     public void onButtonClick_search(View v) {
 
      Intent i = new Intent(Gallery.this, Search.class);
@@ -253,7 +302,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         share_Image(photoPathList.get(photoIndex));
     }
 
+    //########################################################
+    //
     // share the image at the passed filepath (called from onButtonClick_share)
+    //
+    //########################################################
+
     public void share_Image(String path) {
         //ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
         //iv.setImageBitmap(BitmapFactory.decodeFile(path));
@@ -271,8 +325,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
 
         //File photoShare = photos.get(index);
     }
-
+    //########################################################
+    //
     // when the "Snap" button is pressed, take a picture and store it
+    //
+    //########################################################
+
     public void onButtonClick_camera(View v) {
         // create intent for camera
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -295,8 +353,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             }
         }
     }
+    //########################################################
+    //
+    // update list of photos from the files in the device photo folder
+    //
+    //########################################################
 
-    // update list of photos
     private ArrayList<String> findPhotos(Date startTimestamp, Date endTimestamp, String keywords) {
         // get filepath for Pictures folder
         File file = new File(Environment.getExternalStorageDirectory()
@@ -336,8 +398,12 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
         return photos;
     }
+    //########################################################
+    //
+    // scrolls the photo when the user swipes on the screen
+    //
+    //########################################################
 
-    // when the "Left" or "Right" buttons are pressed
     public void scrollPhotos(float velocity) {
         // update current photo's filename using caption text
         updatePhoto(photoPathList.get(photoIndex),
@@ -355,14 +421,14 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             photoPathList = findPhotos(startTimestamp, endTimestamp,keywords);  // JP
         }
 
-        // increase or decrease index depending on button press
-            if (velocity > 0) {
+        // increase or decrease index depending on the direction of the swipe
+            if (velocity > 0) { //positive velocity means swipe from left to right
                 if (photoIndex > 0) {
                     photoIndex--;
                 }
              }
             else {
-                if (photoIndex < (photoPathList.size() - 1)) {
+                if (photoIndex < (photoPathList.size() - 1)) { //negative velocity means swipe from right to left
                     photoIndex++;
                 }
             }
@@ -370,12 +436,16 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         // display the picture with the current index value
         displayPhoto(photoPathList.get(photoIndex));
     }
+    //########################################################
+    //
+    // Display the photo and its associated attributes
+    //
+    //########################################################
 
-    // display the photo
     private void displayPhoto(String path) {
-        ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
-        TextView tv = (TextView) findViewById(R.id.textViewTimeStamp);
-        EditText et = (EditText) findViewById(R.id.editTextCaption);
+        ImageView iv = (ImageView) findViewById(R.id.imageViewPic); //set the Image view to show the image
+        TextView tv = (TextView) findViewById(R.id.textViewTimeStamp); //set the timestamp
+        EditText et = (EditText) findViewById(R.id.editTextCaption); //set the caption
         if (path == null || path =="") {
             iv.setImageResource(R.mipmap.ic_launcher);
             et.setText("");
@@ -387,7 +457,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             et.setText(attr[1]);
             // set photo timestamp
             tv.setText(attr[2] + "_" + attr [3]);
-            if(attr.length >= 8)
+            if(attr.length >= 8)//if there is info in the weather section
             {
                 tvWeather.setText(attr[6]);
             }
@@ -395,7 +465,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             {
                 tvWeather.setText("Weather");
             }
-            if(attr.length >= 7)
+            if(attr.length >= 7) //if there is info in the longitude and latitude sections
             {
                 tvLatitude.setText(attr[4]);
                 tvLongitude.setText(attr[5]);
@@ -409,8 +479,13 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
     }
 
+
+    //########################################################
+    //
     // returns image file with a temporary name in the pictures directory
     // called from "Snap" button function onButtonClick_camera
+    //
+    //########################################################
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA).format(new Date());
@@ -422,8 +497,13 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         return image;
     }
 
+
+    //########################################################
+    //
     // when a picture has been taken in the camera app
     // or when a search has been made
+    //
+    //########################################################
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -450,17 +530,22 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
     }
 
+
+    //########################################################
+    //
     // display photos based on the search criteria
+    //
+    //########################################################
     private void displaySearchResults(Intent data)
     {
         // obtain time values from search
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
+        try { //try to retrieve timstap values
             String from = (String) data.getStringExtra("STARTTIMESTAMP");
             String to = (String) data.getStringExtra("ENDTIMESTAMP");
             startTimestamp = format.parse(from);
             endTimestamp = format.parse(to);
-        } catch (Exception ex) {
+        } catch (Exception ex) { //set default timestamp values if exception
             startTimestamp = null;
             endTimestamp = null;
         }
@@ -469,7 +554,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         keywords = (String) data.getStringExtra("KEYWORDS"); //JP
 
         // obtain location values from search
-        try {
+        try { //try to retrieve latitude and longitude values
             String strLatMin = (String) data.getStringExtra("LATMIN");
             String strLatMax = (String) data.getStringExtra("LATMAX");
             String strLongMin = (String) data.getStringExtra("LONGMIN");
@@ -478,7 +563,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             latMax = Double.parseDouble(strLatMax);
             longMin = Double.parseDouble(strLongMin);
             longMax = Double.parseDouble(strLongMax);
-        } catch (Exception ex) {
+        } catch (Exception ex) { //set default latitude and longitude values if exception
             latMin = -999.0;
             latMax = 999.9;
             longMin = -999.9;
@@ -486,14 +571,14 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
 
         // update list of photos based on search values
-        photoPathList = findPhotos(startTimestamp, endTimestamp, keywords);
+        photoPathList = findPhotos(startTimestamp, endTimestamp, keywords); //find photos that match the time stamp, and keyword criteria
         photoIndex = 0;
 
         // if the list contains photos
         if (photoPathList.size() > 0)
         {
             // display the first photo in the list
-            displayPhoto(photoPathList.get(photoIndex));
+            displayPhoto(photoPathList.get(photoIndex)); //display photo
         }
         // if the list is empty
         else
@@ -504,25 +589,28 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     }
 
 
-    // when scrollPhotos runs ("Left or "Right" button pressed)
-    // update the currently displayed pictures filename with the textbox caption
+    //########################################################
+    //
+    //Function used to rename the photos when a caption is changed
+    //
+    //########################################################
     private void updatePhoto(String path, String caption, String latitude, String longitude, String weather) {
         String[] attr = path.split("_");
-        if (attr.length >= 8)
+        if (attr.length >= 8) //if the file description contains 8 attributes
         {
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
                     latitude + "_" + longitude + "_" + weather + "_.jpg");
             File from = new File(path);
             from.renameTo(to);
         }
-        else if (attr.length >= 7)
+        else if (attr.length >= 7) //if the file description contains 7 attributes
         {
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
                     latitude + "_" + longitude + "_.jpg");
             File from = new File(path);
             from.renameTo(to);
         }
-        else if (attr.length >= 3)
+        else if (attr.length >= 3) //if the file description contains 3 attributes
         {
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_.jpg");
             File from = new File(path);
@@ -530,36 +618,51 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
     }
 
+    //########################################################
+    //
+    //onClick function of the delete button
+    //
+    //########################################################
     public void onButtonClick_delete(View v)
     {
-        if(photoPathList.size() >= 1)
+        if(photoPathList.size() >= 1) //if there is at least one photo
         {
-            delete_photo(photoPathList.get(photoIndex));
+            delete_photo(photoPathList.get(photoIndex)); //call the delete function
         }
 
     }
-
+    //########################################################
+    //
+    //This function deletes the photo currently displayed on the screen
+    //
+    //########################################################
     private void delete_photo(String current_path)
     {
         File file_to_delete = new File(current_path);
         file_to_delete.delete();
-        photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
+        photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), ""); //generate the new list of photo paths
 
-        if(photoPathList.size() >= 1)
+        if(photoPathList.size() >= 1) //If there is at least one photo
         {
-            if(photoIndex >= photoPathList.size() - 2){
-                photoIndex = photoPathList.size()-1;
+            if(photoIndex >= photoPathList.size() - 2){ //if there more than one photo in the paths list
+                photoIndex = photoPathList.size()-1; //set index to the previous photo
 
             }
-            displayPhoto(photoPathList.get(photoIndex));        }
+            displayPhoto(photoPathList.get(photoIndex)); //display photo
+        }
         else
         {
-            photoIndex = 0;
-            displayPhoto(null);
+            photoIndex = 0; //If there are no photos left on the device
+            displayPhoto(null); //display blank file
         }
 
     }
 
+    //########################################################
+    //
+    //This function detects the gestures such as swiping
+    //
+    //########################################################
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         private static final String DEBUG_TAG = "Gestures";
 
@@ -571,9 +674,9 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
-            Log.d(DEBUG_TAG, "onFling: " + velocityX);
-            scrollPhotos(velocityX);
+            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString()); //print the gesture event
+            Log.d(DEBUG_TAG, "onFling: " + velocityX); //display the velocity
+            scrollPhotos(velocityX); //call the scrollPhotos function with the velocity argument
             return true;
         }
     }
