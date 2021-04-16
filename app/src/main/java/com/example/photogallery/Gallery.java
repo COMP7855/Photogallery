@@ -52,7 +52,7 @@ import java.util.Locale;
 public class Gallery extends AppCompatActivity implements AsyncResponse{
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_VIDEO_CAPTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 2;
     String mCurrentPhotoPath;
     String currentVideoPath;
     private ArrayList<String> photoPathList = null;
@@ -406,7 +406,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             tv.setText("");
         } else {
             String[] attr = path.split("_");
-            if(attr[6].equals("VID")){
+            if(attr[7].equals("VID")){
                 iv.setAlpha(0.0f);
                 vd.setAlpha(1.0f);
                 vd.setVideoPath(path);
@@ -451,7 +451,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_000_111_" + "IMG" + "_weather_" ; // 000 and 111 in place of long and lat
+        String imageFileName = "_caption_" + timeStamp + "_000_111_" + "weather_" + "IMG_" ; // 000 and 111 in place of long and lat
 
         // create the image file and store it the image file in the pictures directory
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -463,7 +463,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private File createVideoFile() throws IOException {
         // Create an video file name
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() );
-        String videoFileName = "_caption_" + timeStamp + "_000_111_" + "VID" +"_weather_";
+        String videoFileName = "_caption_" + timeStamp + "_000_111_" + "weather_" + "VID_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File video = File.createTempFile(
                 videoFileName,  /* prefix */
@@ -570,12 +570,16 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     // update the currently displayed pictures filename with the textbox caption
     private void updatePhoto(String path, String caption, String latitude, String longitude, String weather) {
         String[] attr = path.split("_");
+        /*
         if (attr.length >= 8)
         {
+
+         */
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
-                    latitude + "_" + longitude + "_" + weather + "_.jpg");
+                    latitude + "_" + longitude + "_" + weather + "_" + attr[7]);
             File from = new File(path);
             from.renameTo(to);
+            /*
         }
         else if (attr.length >= 7)
         {
@@ -590,6 +594,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             File from = new File(path);
             from.renameTo(to);
         }
+
+             */
     }
 
     public void onButtonClick_delete(View v)
