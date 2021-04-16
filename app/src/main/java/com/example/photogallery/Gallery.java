@@ -71,7 +71,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private Double longMax = 999.9;
 
     private static final String TAG = "GalleryActivity";
-    HttpRequest asyncTask =new HttpRequest();
+
     private TextView tvWeather ;
 
     private static final String DEBUG_TAG = "Gestures";
@@ -100,6 +100,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 
     @Override
@@ -111,6 +112,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private void callWeatherAPI()
     {
         String weatherURLstring = createWeatherURL();
+
+        HttpRequest asyncTask =new HttpRequest();
 
         //this to set delegate/listener back to this class
         asyncTask.delegate = this;
