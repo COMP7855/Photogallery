@@ -576,7 +576,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
 
          */
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
-                    latitude + "_" + longitude + "_" + weather + "_" + attr[7]);
+                    latitude + "_" + longitude + "_" + weather + "_" + attr[7] + "_" + attr[8]);
             File from = new File(path);
             from.renameTo(to);
             /*
