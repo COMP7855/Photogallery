@@ -67,7 +67,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private Double longMax = 999.9;
 
     private static final String TAG = "GalleryActivity";
-    WeatherAPI asyncTask =new WeatherAPI();
+    HttpRequest asyncTask =new HttpRequest();
     private TextView tvWeather ;
 
     private static final String DEBUG_TAG = "Gestures";

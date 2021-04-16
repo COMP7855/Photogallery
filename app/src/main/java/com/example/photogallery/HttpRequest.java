@@ -18,9 +18,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class WeatherAPI extends AsyncTask<String, Void, String> {
+public class HttpRequest extends AsyncTask<String, Void, String> {
 
-    private static final String TAG = "GalleryActivityWeather";
+    //private static final String TAG = "HttpRequest";
     public AsyncResponse delegate = null;
 
     @Override
@@ -42,9 +42,8 @@ public class WeatherAPI extends AsyncTask<String, Void, String> {
                 responseCode = conn.getResponseCode();
                 isSuccess = responseCode == 200;
             } catch (Exception e) {
-                Log.e(TAG, "I got an error", e);
+                //Log.e(TAG, "I got an error", e);
             }
-
 
             try (
                     BufferedReader in = new BufferedReader(new InputStreamReader(isSuccess ? conn.getInputStream() : conn.getErrorStream()))
@@ -58,13 +57,10 @@ public class WeatherAPI extends AsyncTask<String, Void, String> {
                 in.close();
             }
             if (!isSuccess) {
-                Log.d(TAG, "Bad response status code:" + responseCode + response.toString());
+                //Log.d(TAG, "Bad response status code:" + responseCode + response.toString());
 
                 return "Fail";
             }
-
-            //pass the string response to be parsed and used
-            //parseWeatherDataJson(response.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
