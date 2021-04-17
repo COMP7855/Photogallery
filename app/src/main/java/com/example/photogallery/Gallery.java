@@ -28,6 +28,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.VideoView;
 
+import com.example.photogallery.Http.AsyncResponse;
+import com.example.photogallery.Http.HttpRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,7 +51,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class Gallery extends AppCompatActivity implements AsyncResponse{
+public class Gallery extends AppCompatActivity implements AsyncResponse {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_VIDEO_CAPTURE = 2;
