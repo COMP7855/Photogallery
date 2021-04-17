@@ -21,10 +21,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.VideoView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -50,7 +52,9 @@ import java.util.Locale;
 public class Gallery extends AppCompatActivity implements AsyncResponse{
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 10;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 2;
     String mCurrentPhotoPath;
+    String currentVideoPath;
     private ArrayList<String> photoPathList = null;
     public int photoIndex = 0;
     private Date startTimestamp = null;
@@ -67,7 +71,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private Double longMax = 999.9;
 
     private static final String TAG = "GalleryActivity";
-    HttpRequest asyncTask =new HttpRequest();
+
     private TextView tvWeather ;
 
     private static final String DEBUG_TAG = "Gestures";
@@ -101,6 +105,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 
     //########################################################
@@ -123,6 +128,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private void callWeatherAPI()
     {
         String weatherURLstring = createWeatherURL();
+
+        HttpRequest asyncTask =new HttpRequest();
 
         //this to set delegate/listener back to this class
         asyncTask.delegate = this;
@@ -355,10 +362,31 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     }
     //########################################################
     //
+    // function to take video
+    //
+    //########################################################
+    @SuppressLint("QueryPermissionsNeeded")
+    public void takeVideo(View view) {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            File videoFile = null;
+            try{
+                videoFile = createVideoFile();
+            }catch (IOException ex){
+                // Error occurred while creating the File
+            }
+            if(videoFile != null){
+                Uri videoURI = FileProvider.getUriForFile(this,"com.example.photogallery.fileprovider",videoFile);
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT,videoURI);
+                startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+            }
+        }
+    }
+    //########################################################
+    //
     // update list of photos from the files in the device photo folder
     //
     //########################################################
-
     private ArrayList<String> findPhotos(Date startTimestamp, Date endTimestamp, String keywords) {
         // get filepath for Pictures folder
         File file = new File(Environment.getExternalStorageDirectory()
@@ -443,16 +471,32 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     //########################################################
 
     private void displayPhoto(String path) {
-        ImageView iv = (ImageView) findViewById(R.id.imageViewPic); //set the Image view to show the image
-        TextView tv = (TextView) findViewById(R.id.textViewTimeStamp); //set the timestamp
-        EditText et = (EditText) findViewById(R.id.editTextCaption); //set the caption
+        VideoView vd = findViewById(R.id.videoView);
+        ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
+        TextView tv = (TextView) findViewById(R.id.textViewTimeStamp);
+        EditText et = (EditText) findViewById(R.id.editTextCaption);
         if (path == null || path =="") {
+            iv.setAlpha(1.0f);
+            vd.setAlpha(0.0f);
             iv.setImageResource(R.mipmap.ic_launcher);
             et.setText("");
             tv.setText("");
         } else {
-            iv.setImageBitmap(BitmapFactory.decodeFile(path));
             String[] attr = path.split("_");
+            if(attr[7].equals("VID")){
+                iv.setAlpha(0.0f);
+                vd.setAlpha(1.0f);
+                vd.setVideoPath(path);
+                MediaController md = new MediaController(this);
+                md.setAnchorView(vd);
+                vd.setMediaController(md);
+                vd.start();
+            }
+            else{
+                iv.setAlpha(1.0f);
+                vd.setAlpha(0.0f);
+                iv.setImageBitmap(BitmapFactory.decodeFile(path));
+            }
             // set photo caption
             et.setText(attr[1]);
             // set photo timestamp
@@ -488,13 +532,28 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     //########################################################
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA).format(new Date());
-        String imageFileName = "_caption_" + timeStamp + "_000_111_" + "_weather_"; // 000 and 111 in place of long and lat
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "_caption_" + timeStamp + "_000_111_" + "weather_" + "IMG_" ; // 000 and 111 in place of long and lat
+
         // create the image file and store it the image file in the pictures directory
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+    /* Return a unique file name for a video using data-time stamp*/
+    private File createVideoFile() throws IOException {
+        // Create an video file name
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() );
+        String videoFileName = "_caption_" + timeStamp + "_000_111_" + "weather_" + "VID_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File video = File.createTempFile(
+                videoFileName,  /* prefix */
+                ".mp4",   /* suffix */
+                storageDir      /* directory */
+        );
+        currentVideoPath = video.getAbsolutePath();
+        return video;
     }
 
 
@@ -519,6 +578,16 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
         // if a photo was taken
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
         {
+            // update list of photos
+            photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
+            // display the most recent photo
+            photoIndex = photoPathList.size()-1;
+            displayPhoto(photoPathList.get(photoIndex));
+
+            // get the current location and weather
+            getLocationAndWeather();
+        }
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             // update list of photos
             photoPathList = findPhotos(new Date(Long.MIN_VALUE), new Date(), "");
             // display the most recent photo
@@ -596,12 +665,16 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     //########################################################
     private void updatePhoto(String path, String caption, String latitude, String longitude, String weather) {
         String[] attr = path.split("_");
-        if (attr.length >= 8) //if the file description contains 8 attributes
+        /*
+        if (attr.length >= 8)
         {
+
+         */
             File to = new File(attr[0] + "_" + caption + "_" + attr[2] + "_" + attr[3]+ "_" +
-                    latitude + "_" + longitude + "_" + weather + "_.jpg");
+                    latitude + "_" + longitude + "_" + weather + "_" + attr[7] + "_" + attr[8]);
             File from = new File(path);
             from.renameTo(to);
+            /*
         }
         else if (attr.length >= 7) //if the file description contains 7 attributes
         {
@@ -616,6 +689,8 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
             File from = new File(path);
             from.renameTo(to);
         }
+
+             */
     }
 
     //########################################################
