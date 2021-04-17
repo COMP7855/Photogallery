@@ -13,14 +13,7 @@
         tools:layout_editor_absoluteX="120dp"
         tools:layout_editor_absoluteY="100dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="418dp"
-            android:foreground="@drawable/camera"
-            android:orientation="vertical"></LinearLayout>
-
         <TextView
-            android:id="@+id/textViewSnap"
             android:layout_width="309dp"
             android:layout_height="85dp"
             android:layout_marginStart="100dp"
@@ -30,7 +23,8 @@
             android:text="  SNAP"
             android:textColor="#F44336"
             android:textSize="50sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/buttonSignIn"
@@ -42,10 +36,10 @@
             android:onClick="onButtonClick"
             android:text="SIGN IN"
             app:backgroundTint="#1C88DF"
-            app:iconTint="#2196F3" />
+            app:iconTint="#2196F3"
+            tools:ignore="HardcodedText" />
 
         <Button
-            android:id="@+id/buttonSignUp"
             android:layout_width="196dp"
             android:layout_height="55dp"
             android:layout_marginStart="89dp"
@@ -53,7 +47,8 @@
             android:layout_marginTop="10dp"
             android:text="SIGN UP"
             app:backgroundTint="#1C88DF"
-            app:iconTint="#2196F3" />
+            app:iconTint="#2196F3"
+            tools:ignore="HardcodedText" />
 
 
     </LinearLayout>

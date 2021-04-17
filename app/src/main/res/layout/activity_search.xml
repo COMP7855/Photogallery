@@ -35,7 +35,8 @@
         android:hint="@string/enter_start_time"
         android:inputType="date|time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/etLatMin"
@@ -46,7 +47,8 @@
         android:hint="@string/enter_min_lat"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextKeyword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextKeyword"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/etLatMax"
@@ -57,7 +59,9 @@
         android:hint="Enter maximum latitude"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLatMin" />
+        app:layout_constraintTop_toBottomOf="@+id/etLatMin"
+        tools:ignore="HardcodedText"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/etLongMin"
@@ -68,7 +72,9 @@
         android:hint="Enter minimum longitude"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLatMax" />
+        app:layout_constraintTop_toBottomOf="@+id/etLatMax"
+        tools:ignore="HardcodedText"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/etLongMax"
@@ -79,7 +85,9 @@
         android:hint="Enter maximum longitude"
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLongMin" />
+        app:layout_constraintTop_toBottomOf="@+id/etLongMin"
+        tools:ignore="HardcodedText"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textViewEndTime"
@@ -102,7 +110,9 @@
         android:hint="Enter end time"
         android:inputType="date|time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextStartTime" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextStartTime"
+        tools:ignore="HardcodedText"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textViewKeyword"
@@ -126,7 +136,9 @@
         android:hint="Enter keywords"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEndTime" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEndTime"
+        tools:ignore="HardcodedText"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/textViewKeyword3"

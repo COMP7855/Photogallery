@@ -470,6 +470,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     //
     //########################################################
 
+    @SuppressLint("SetTextI18n")
     private void displayPhoto(String path) {
         VideoView vd = findViewById(R.id.videoView);
         ImageView iv = (ImageView) findViewById(R.id.imageViewPic);
@@ -532,7 +533,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     //########################################################
     private File createImageFile() throws IOException {
         // Create an empty image file name with temporary caption, current time, and location
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "_caption_" + timeStamp + "_000_111_" + "weather_" + "IMG_" ; // 000 and 111 in place of long and lat
 
         // create the image file and store it the image file in the pictures directory
@@ -608,7 +609,7 @@ public class Gallery extends AppCompatActivity implements AsyncResponse{
     private void displaySearchResults(Intent data)
     {
         // obtain time values from search
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        @SuppressLint("SimpleDateFormat") DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try { //try to retrieve timstap values
             String from = (String) data.getStringExtra("STARTTIMESTAMP");
             String to = (String) data.getStringExtra("ENDTIMESTAMP");

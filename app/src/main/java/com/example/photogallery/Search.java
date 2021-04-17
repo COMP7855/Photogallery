@@ -1,6 +1,8 @@
 package com.example.photogallery;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Intent; import android.os.Bundle;
 import android.view.View; import android.widget.EditText;
 import java.text.DateFormat; import java.text.SimpleDateFormat;
@@ -14,7 +16,7 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         try {
             Calendar calendar = Calendar.getInstance();
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            @SuppressLint("SimpleDateFormat") DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date now = calendar.getTime();
             String todayStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(now);
             Date today = format.parse((String) todayStr);

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.photogallery" >
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"
+        tools:ignore="ScopedStorage" />
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
     <application
@@ -15,7 +17,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PhotoGallery" >
+        android:theme="@style/Theme.PhotoGallery"
+        tools:targetApi="m"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity android:name=".Search" >
         </activity>
         <activity android:name=".Gallery" />
